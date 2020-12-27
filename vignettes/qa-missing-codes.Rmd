@@ -47,15 +47,15 @@ missing_codes_01
 ```
 
 ```{r}
-pg13::writeTable(conn_fun = "chariot::connectAthena()",
+pg13::write_table(conn_fun = "pg13::local_connect()",
                  schema = "patelm9",
-                 tableName = "mcode_snomed_ancestor_codes",
+                 table_name = "mcode_snomed_ancestor_codes",
                  drop_existing = TRUE,
                  data = missing_codes_01)
 ```
 
 ```{r}
-conn <- chariot::connectAthena()
+conn <- pg13::local_connect()
 missing_codes_01b <-
 pg13::query(conn = conn,
             sql_statement = 
@@ -67,12 +67,64 @@ pg13::query(conn = conn,
               )
               SELECT m.*, c2.* 
               FROM patelm9.mcode_snomed_ancestor_codes m 
-              LEFT JOIN snomed s
+              INNER JOIN snomed s
               ON m.ancestor_code = s.concept_code 
-              LEFT JOIN omop_vocabulary.concept_ancestor ca 
+              INNER JOIN omop_vocabulary.concept_ancestor ca 
               ON ca.ancestor_concept_id = s.concept_id 
-              LEFT JOIN omop_vocabulary.concept c2 
+              INNER JOIN snomed c2 
               ON c2.concept_id = ca.descendant_concept_id 
+              ")
+chariot::dcAthena(conn = conn)
+```
+
+```{r}
+missing_codes_02 <-
+value_sets %>%
+  rubix::filter_at_grepl(col = `Logical Definition`,
+                         grepl_phrase = "excludes codes descending from") %>%
+  select(descendant_code = `Logical Definition`) %>%
+  extract(col = descendant_code,
+          into = c("descendant_code"),
+          regex = "excludes codes descending from ([0-9]{1,}) .*$",
+          remove = TRUE)
+```
+
+```{r}
+pg13::write_table(conn_fun = "pg13::local_connect()",
+                 schema = "patelm9",
+                 tableName = "mcode_snomed_descendant_codes",
+                 drop_existing = TRUE,
+                 data = missing_codes_02)
+```
+
+```{r}
+conn <- pg13::local_connect()
+missing_codes_02b <-
+pg13::query(conn = conn,
+            sql_statement = 
+              "
+              WITH snomed AS (
+                SELECT * 
+                FROM omop_vocabulary.concept c 
+                WHERE c.vocabulary_id = 'SNOMED'
+              ),
+              ancs AS (
+                SELECT m.*, ca.ancestor_concept_id, ca.descendant_concept_id
+                FROM patelm9.mcode_snomed_descendant_codes m 
+                INNER JOIN snomed s
+                ON m.descendant_code = s.concept_code 
+                INNER JOIN omop_vocabulary.concept_ancestor ca 
+                ON ca.descendant_concept_id = s.concept_id 
+                INNER JOIN snomed c2 
+                ON c2.concept_id = ca.ancestor_concept_id 
+              )
+              
+              SELECT * 
+              FROM ancs a 
+              WHERE a.ancestor_concept_id NOT IN (
+                  SELECT descendant_concept_id 
+                  FROM ancs a2
+              )
               ")
 chariot::dcAthena(conn = conn)
 ```
