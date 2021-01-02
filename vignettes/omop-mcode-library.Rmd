@@ -1,0 +1,313 @@
+---
+title: "QA Missing Codes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{QA Missing Codes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(mOMOP)
+library(chariot)
+library(tidyverse)
+```
+
+This vignette takes a look at the Value Sets in the mCode Data Dictionary to 
+create a standard library of Oncology concepts.
+
+```{r}
+value_sets <- get_value_sets()
+value_sets
+```
+
+The valueset is split by `Code System` to perform a join with the OMOP Vocabulary. 
+
+```{r}
+value_sets_by_vocab <- 
+  value_sets %>%
+  rubix::split_by(col = `Code System`)
+names(value_sets_by_vocab)
+```
+
+## SNOMED  
+
+The SNOMED subset of the library contains:  
+
+* Explicitly stated concepts  
+* Concepts that are descendants of a stated code  
+* Concepts that are ancestors of a stated code  
+
+To derive all concepts, the code in the `logical_definition` field is extracted 
+based on the listed scenario above.  
+
+```{r}
+snomed_library <-
+   value_sets_by_vocab$`SNOMED CT` %>%
+  rubix::format_colnames() %>%
+  distinct() %>%
+  mutate_all(as.character) %>%
+  extract(col = logical_definition,
+          into = "descendants_of",
+          regex = "includes codes descending from ([0-9]{1,})[^0-9]{1}.*$",
+          remove = FALSE) %>%
+  extract(col = logical_definition,
+          into = "ancestors_of",
+          regex = "excludes codes descending from ([0-9]{1,})[^0-9]{1}.*$",
+          remove = FALSE) %>%
+  mutate(all_codes = coalesce(code, ancestors_of, descendants_of)) %>%
+  mutate_all(trimws)
+```
+
+```{r}
+snomed_omop_library1 <-
+chariot::join_on_concept_code(kind = "LEFT",
+                              data = snomed_library,
+                              column = "all_codes",
+                              where_in_concept_field = "vocabulary_id",
+                              where_in_concept_field_value = "SNOMED")
+snomed_omop_library1 <-
+  snomed_library %>%
+  left_join(snomed_omop_library1,
+             by = c("value_set_name", 
+                    "ancestors_of",
+                    "descendants_of",
+                    "all_codes",
+                    "code_system", 
+                    "logical_definition", 
+                    "code", 
+                    "code_description")) %>%
+  distinct()
+snomed_omop_library1
+```
+
+
+```{r}
+snomed_omop_library2a <-
+  snomed_omop_library1 %>%
+  filter(!is.na(descendants_of)) 
+
+snomed_omop_library2a2 <-
+  join_for_descendants(kind = "LEFT",
+                       data = snomed_omop_library2a,
+                       ancestor_id_column = "concept_id") %>%
+  select(all_of(colnames(snomed_library)),
+         starts_with("descendant_")) %>%
+  rename_all(~ str_remove_all(., pattern = "^descendant_"))
+snomed_omop_library2a2
+```
+
+```{r}
+snomed_omop_library2b <-
+  snomed_omop_library1 %>%
+  filter(!is.na(ancestors_of))
+
+snomed_omop_library2b2 <-
+  join_for_ancestors(kind = "LEFT",
+                     data = snomed_omop_library2b,
+                     descendant_id_column = "concept_id") %>%
+  filter(min_levels_of_separation != 0) %>%
+  select(all_of(colnames(snomed_library)),
+         starts_with("ancestor_")) %>%
+  rename_all(~ str_remove_all(., pattern = "^ancestor_"))
+snomed_omop_library2b2
+```
+
+```{r}
+snomed_omop_library2c <-
+  snomed_omop_library1 %>% 
+  filter(is.na(descendants_of), is.na(ancestors_of))
+snomed_omop_library2c
+```
+
+```{r}
+snomed_omop_library <-
+  bind_rows(snomed_omop_library2a2,
+            snomed_omop_library2b2,
+            snomed_omop_library2c)
+snomed_omop_library
+```
+
+
+## LOINC  
+```{r}
+loinc_library <-
+   value_sets_by_vocab$LOINC %>%
+  rubix::format_colnames() %>%
+  mutate_all(as.character) %>%
+  mutate_all(trimws) %>%
+  distinct()
+
+loinc_omop_library <-
+chariot::join_on_concept_code(kind = "LEFT",
+                              data = loinc_library,
+                              column = "code",
+                              where_in_concept_field = "vocabulary_id",
+                              where_in_concept_field_value = "LOINC")
+
+loinc_omop_library <-
+  loinc_library %>%
+  left_join(loinc_omop_library,
+             by = c("value_set_name", 
+                    "code_system", 
+                    "logical_definition", 
+                    "code", 
+                    "code_description")) %>%
+  distinct()
+```
+
+
+## ICD-10 CM 
+
+```{r}
+icd10cm_library <-
+   value_sets_by_vocab$`ICD-10-CM` %>%
+  rubix::format_colnames() %>%
+  mutate_all(as.character) %>%
+  mutate_all(trimws) %>%
+  mutate(code = str_replace_all(string = code,
+                                pattern = "(^[A-Z]{1}[0-9A-Z]{2})([0-9A-Z]{1}.*$)",
+                                replacement = "\\1.\\2")) %>%
+  distinct()
+
+icd10cm_omop_library <-
+chariot::join_on_concept_code(kind = "LEFT",
+                              data = icd10cm_library,
+                              column = "code",
+                              where_in_concept_field = "vocabulary_id",
+                              where_in_concept_field_value = "ICD10CM")
+
+icd10cm_omop_library <-
+  icd10cm_library %>%
+  left_join(icd10cm_omop_library,
+             by = c("value_set_name", 
+                    "code_system", 
+                    "logical_definition", 
+                    "code", 
+                    "code_description")) %>%
+  distinct()
+```
+
+
+
+
+# Missing Codes
+
+```{r}
+value_sets <- get_value_sets()
+value_sets <-
+  value_sets %>%
+  filter(is.na(Code))
+value_sets
+```
+
+
+
+
+There are 5 types of missing codes: 
+1. SNOMED descendants of a specific SNOMED code  
+2. 
+
+```{r}
+missing_codes_01 <-
+value_sets %>%
+  rubix::filter_at_grepl(col = `Logical Definition`,
+                         grepl_phrase = "includes codes descending from") %>%
+  select(ancestor_code = `Logical Definition`) %>%
+  extract(col = ancestor_code,
+          into = c("ancestor_code"),
+          regex = "includes codes descending from ([0-9]{1,}) .*$",
+          remove = TRUE)
+missing_codes_01
+```
+
+```{r}
+pg13::write_table(conn_fun = "pg13::local_connect()",
+                 schema = "patelm9",
+                 table_name = "mcode_snomed_ancestor_codes",
+                 drop_existing = TRUE,
+                 data = missing_codes_01)
+```
+
+```{r}
+conn <- pg13::local_connect()
+missing_codes_01b <-
+pg13::query(conn = conn,
+            sql_statement = 
+              "
+              WITH snomed AS (
+                SELECT * 
+                FROM omop_vocabulary.concept c 
+                WHERE c.vocabulary_id = 'SNOMED'
+              )
+              SELECT m.*, c2.* 
+              FROM patelm9.mcode_snomed_ancestor_codes m 
+              INNER JOIN snomed s
+              ON m.ancestor_code = s.concept_code 
+              INNER JOIN omop_vocabulary.concept_ancestor ca 
+              ON ca.ancestor_concept_id = s.concept_id 
+              INNER JOIN snomed c2 
+              ON c2.concept_id = ca.descendant_concept_id 
+              ")
+chariot::dcAthena(conn = conn)
+```
+
+```{r}
+missing_codes_02 <-
+value_sets %>%
+  rubix::filter_at_grepl(col = `Logical Definition`,
+                         grepl_phrase = "excludes codes descending from") %>%
+  select(descendant_code = `Logical Definition`) %>%
+  extract(col = descendant_code,
+          into = c("descendant_code"),
+          regex = "excludes codes descending from ([0-9]{1,}) .*$",
+          remove = TRUE)
+```
+
+```{r}
+pg13::write_table(conn_fun = "pg13::local_connect()",
+                 schema = "patelm9",
+                 tableName = "mcode_snomed_descendant_codes",
+                 drop_existing = TRUE,
+                 data = missing_codes_02)
+```
+
+```{r}
+conn <- pg13::local_connect()
+missing_codes_02b <-
+pg13::query(conn = conn,
+            sql_statement = 
+              "
+              WITH snomed AS (
+                SELECT * 
+                FROM omop_vocabulary.concept c 
+                WHERE c.vocabulary_id = 'SNOMED'
+              ),
+              ancs AS (
+                SELECT m.*, ca.ancestor_concept_id, ca.descendant_concept_id
+                FROM patelm9.mcode_snomed_descendant_codes m 
+                INNER JOIN snomed s
+                ON m.descendant_code = s.concept_code 
+                INNER JOIN omop_vocabulary.concept_ancestor ca 
+                ON ca.descendant_concept_id = s.concept_id 
+                INNER JOIN snomed c2 
+                ON c2.concept_id = ca.ancestor_concept_id 
+              )
+              
+              SELECT * 
+              FROM ancs a 
+              WHERE a.ancestor_concept_id NOT IN (
+                  SELECT descendant_concept_id 
+                  FROM ancs a2
+              )
+              ")
+chariot::dcAthena(conn = conn)
+```
+
