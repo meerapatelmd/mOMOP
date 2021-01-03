@@ -1,0 +1,63 @@
+---
+title: "mCode Value Sets"
+author: "Meera Y. Patel, M.D."
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(comment = "##",
+                      tidy = TRUE, #`styler` to use styler:style_text() to reformat code
+                      tidy.opts = list(blank = FALSE, width.cutoff = 60),
+                      echo = TRUE,
+                      eval = TRUE,
+                      cache = TRUE,
+                      cache.path = "reports/cache/",
+                      child = NULL, #file/s to knit and then include,
+                      collapse = FALSE, #collapse all output into a single block,
+                      error = TRUE, #display error messages in doc. FALSE stops render when error is thrown
+                      fig.align = "center", #left, right, center, or default
+                      fig.width = 7, #inches
+                      fig.height = 7, #inches
+                      include = TRUE, #include chunk?
+                      message = TRUE, #display code messages?
+                      tidy = TRUE, #tidy code 
+                      warning = TRUE, #include warnings?
+                      results = "markup"
+                        # "asis": passthrough results
+                        # "hide": do not display results 
+                        # "hold": put all results below all code
+                      )
+```
+  
+Last updated on: `r Sys.Date()`
+
+This vignette explores reconfiguring the mCode to OMOP Mappings. 
+
+```{r}
+library(mOMOP)
+library(tidyverse)
+```
+
+
+```{r}
+complete_map <-
+list(CANCER_STAGING, 
+          GENOMICS, 
+          ICD10CM, 
+          LOINC, 
+          SNOMED, 
+          SPECIMEN, 
+          UNITS_OF_MEASUREMENT) %>%
+  map(mutate_all, as.character) %>%
+  bind_rows()
+complete_map
+```
+
+```{r}
+value_sets <-
+  complete_map %>%
+  rubix::split_by(col = value_set_name)
+value_sets
+```
+
+

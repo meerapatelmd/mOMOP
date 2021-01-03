@@ -1,0 +1,10 @@
+\documentclass{article}
+\usepackage{pdfpages}
+%\VignetteIndexEntry{mCode Valuesets}
+%\VignettePackage{uptodate}
+%\VignetteEncoding{UTF-8}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+\includepdf[pages=-, fitpaper=true]{valuesets.pdf}
+\end{document}
