@@ -67,6 +67,11 @@ value_sets <-
 names(value_sets)
 ```
 
+## OMOP Concept Distribution Plots 
+
+Each mCode value set's OMOP mapping distribution is plotted for visual 
+comparison of the way the concepts are represented in OMOP. 
+
 ```{r}
 for (i in seq_along(value_sets)) {
 df <-
@@ -75,17 +80,28 @@ value_sets[[i]] %>%
         vocabulary_id,
         concept_class_id)
 
-p <- ggplot2::ggplot(data = df,
-                aes(x = reorder(concept_class_id, -n),
-                    y = n,
-                    fill = domain_id)) +
-  ggplot2::geom_bar(stat = "identity") +
+p <- 
+  ggplot2::ggplot(
+    data = df,
+    aes(
+      x = reorder(concept_class_id, -n),
+      y = n,
+      fill = domain_id
+      )
+    ) +
+  ggplot2::geom_bar(
+    stat = "identity"
+    ) +
   ggplot2::theme_minimal() + 
-  ggplot2::scale_y_continuous(expand = expansion(mult = c(0,0.05))) +
-  ggplot2::labs(title = sprintf("mCode Value Set %s OMOP Concept Distribution", names(value_sets)[i]),
+  ggplot2::scale_y_continuous(
+    expand = expansion(mult = c(0,0.05))) +
+  ggplot2::labs(title = 
+                  sprintf("mCode Value Set %s OMOP Concept Distribution", 
+                                names(value_sets)[i]),
                 x = "OMOP Concept Class",
                 y = "Count") +
-  ggplot2::scale_fill_brewer(palette = "Dark2")
+  ggplot2::scale_fill_brewer(palette = "Dark2") +
+  ggplot2::theme(axis.text.x  = element_text(angle=45, hjust=1.1, size=8))
 
 print(p)
 }
