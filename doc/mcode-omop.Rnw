@@ -1,0 +1,10 @@
+\documentclass{article}
+\usepackage{pdfpages}
+%\VignetteIndexEntry{mCode to OMOP Library}
+%\VignettePackage{uptodate}
+%\VignetteEncoding{UTF-8}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+\includepdf[pages=-, fitpaper=true]{omop-mcode-library.pdf}
+\end{document}
