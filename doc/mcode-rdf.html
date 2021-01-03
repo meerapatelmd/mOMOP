@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>mCode Valuesets to RDF</title>
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">mCode Valuesets to RDF</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(mOMOP)</a></code></pre></div>
+<p>The mappings between the mCode Value Sets and OMOP Concepts is converted into an RDF to view and edit in Protege.</p>
+<p>There are 3 vocabulary-level datasets in this package that require additional parsing for appropriate categorization into owl: <code>SNOMED</code>, <code>ICD10CM</code>, and <code>LOINC</code>. This categarization is done by assessing the source mCode value sets each belongs to.</p>
+<p>In mCode, <code>LOINC</code> is used only for tumor marker testing with no overlap with any other dataset.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">unique</span>(LOINC<span class="op">$</span>value_set_name)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt; [1] &quot;TumorMarkerTestVS&quot;</span></a></code></pre></div>
+<p>All the valuesets represented by <code>ICD10CM</code> overlaps with <code>SNOMED</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">unique</span>(ICD10CM<span class="op">$</span>value_set_name)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] &quot;CancerDisorderVS&quot;                          </span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [2] &quot;ComorbidConditionVS&quot;                       </span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; [3] &quot;PrimaryOrUncertainBehaviorCancerDisorderVS&quot;</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; [4] &quot;SecondaryCancerDisorderVS&quot;</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="kw">unique</span>(SNOMED<span class="op">$</span>value_set_name)</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt;  [1] &quot;CancerBodyLocationVS&quot;                      </span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;  [2] &quot;CancerDisorderVS&quot;                          </span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt;  [3] &quot;ComorbidConditionVS&quot;                       </span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt;  [4] &quot;HistologyMorphologyBehaviorVS&quot;             </span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt;  [5] &quot;PrimaryOrUncertainBehaviorCancerDisorderVS&quot;</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt;  [6] &quot;SecondaryCancerDisorderVS&quot;                 </span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt;  [7] &quot;CancerDiseaseStatusEvidenceTypeVS&quot;         </span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt;  [8] &quot;CancerRelatedSurgicalProcedureVS&quot;          </span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt;  [9] &quot;CancerStagingSystemVS&quot;                     </span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; [10] &quot;ConditionStatusTrendVS&quot;                    </span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; [11] &quot;LateralityVS&quot;                              </span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; [12] &quot;RadiationProcedureVS&quot;                      </span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt; [13] &quot;RadiationTargetBodySiteVS&quot;                 </span></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt; [14] &quot;TreatmentIntentVS&quot;                         </span></a>
+<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt; [15] &quot;TreatmentTerminationReasonVS&quot;              </span></a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt; [16] &quot;YesNoUnknownVS&quot;</span></a></code></pre></div>
+<p>To manage the overlaps, <code>ICD10CM</code> and <code>SNOMED</code> are combined and split by value set.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">ICD10CM_SNOMED &lt;-</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw">bind_rows</span>(ICD10CM,</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">            SNOMED) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span>rubix<span class="op">::</span><span class="kw">split_by</span>(<span class="dt">col =</span> value_set_name)</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw">names</span>(ICD10CM_SNOMED)</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt;  [1] &quot;CancerBodyLocationVS&quot;                      </span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt;  [2] &quot;CancerDiseaseStatusEvidenceTypeVS&quot;         </span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt;  [3] &quot;CancerDisorderVS&quot;                          </span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt;  [4] &quot;CancerRelatedSurgicalProcedureVS&quot;          </span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt;  [5] &quot;CancerStagingSystemVS&quot;                     </span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt;  [6] &quot;ComorbidConditionVS&quot;                       </span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt;  [7] &quot;ConditionStatusTrendVS&quot;                    </span></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt;  [8] &quot;HistologyMorphologyBehaviorVS&quot;             </span></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt;  [9] &quot;LateralityVS&quot;                              </span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; [10] &quot;PrimaryOrUncertainBehaviorCancerDisorderVS&quot;</span></a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; [11] &quot;RadiationProcedureVS&quot;                      </span></a>
+<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; [12] &quot;RadiationTargetBodySiteVS&quot;                 </span></a>
+<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt; [13] &quot;SecondaryCancerDisorderVS&quot;                 </span></a>
+<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt; [14] &quot;TreatmentIntentVS&quot;                         </span></a>
+<a class="sourceLine" id="cb4-20" data-line-number="20"><span class="co">#&gt; [15] &quot;TreatmentTerminationReasonVS&quot;              </span></a>
+<a class="sourceLine" id="cb4-21" data-line-number="21"><span class="co">#&gt; [16] &quot;YesNoUnknownVS&quot;</span></a></code></pre></div>
+<p>The names are adjusted to following the uppercase snake format for this project.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">nms &lt;-<span class="st"> </span><span class="kw">names</span>(ICD10CM_SNOMED)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">nms &lt;-<span class="st"> </span><span class="kw">str_remove_all</span>(nms, <span class="st">&quot;VS$&quot;</span>)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">nms &lt;-<span class="st"> </span><span class="kw">str_replace_all</span>(nms, <span class="st">&quot;([a-z]{1})([A-Z]{1})&quot;</span>,<span class="st">&quot;</span><span class="ch">\\</span><span class="st">1_</span><span class="ch">\\</span><span class="st">2&quot;</span>)</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">nms &lt;-<span class="st"> </span><span class="kw">toupper</span>(nms)</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="kw">names</span>(ICD10CM_SNOMED) &lt;-<span class="st"> </span>nms</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="kw">names</span>(ICD10CM_SNOMED)</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt;  [1] &quot;CANCER_BODY_LOCATION&quot;                         </span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;  [2] &quot;CANCER_DISEASE_STATUS_EVIDENCE_TYPE&quot;          </span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;  [3] &quot;CANCER_DISORDER&quot;                              </span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;  [4] &quot;CANCER_RELATED_SURGICAL_PROCEDURE&quot;            </span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;  [5] &quot;CANCER_STAGING_SYSTEM&quot;                        </span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;  [6] &quot;COMORBID_CONDITION&quot;                           </span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt;  [7] &quot;CONDITION_STATUS_TREND&quot;                       </span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt;  [8] &quot;HISTOLOGY_MORPHOLOGY_BEHAVIOR&quot;                </span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt;  [9] &quot;LATERALITY&quot;                                   </span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt; [10] &quot;PRIMARY_OR_UNCERTAIN_BEHAVIOR_CANCER_DISORDER&quot;</span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; [11] &quot;RADIATION_PROCEDURE&quot;                          </span></a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt; [12] &quot;RADIATION_TARGET_BODY_SITE&quot;                   </span></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt; [13] &quot;SECONDARY_CANCER_DISORDER&quot;                    </span></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#&gt; [14] &quot;TREATMENT_INTENT&quot;                             </span></a>
+<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="co">#&gt; [15] &quot;TREATMENT_TERMINATION_REASON&quot;                 </span></a>
+<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">#&gt; [16] &quot;YES_NO_UNKNOWN&quot;</span></a></code></pre></div>
+<p>The other datasets are combined into a list with <code>LOINC</code> renamed to <code>TUMOR_MARKER_MEASUREMENT</code>. Each dataset in the <code>mcode_classes</code> list is now divided by “Class” for the OWL class hierarchy.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">other_value_sets &lt;-</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">list</span>(<span class="dt">CANCER_STAGING =</span> CANCER_STAGING, </a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">          <span class="dt">GENOMICS =</span> GENOMICS, </a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">          <span class="dt">TUMOR_MARKER_MEASUREMENT =</span> LOINC, </a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">          <span class="dt">SPECIMEN =</span> SPECIMEN, </a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">          <span class="dt">UNITS_OF_MEASUREMENT =</span> UNITS_OF_MEASUREMENT) </a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">mcode_classes &lt;-</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="st">  </span><span class="kw">c</span>(ICD10CM_SNOMED,</a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">    other_value_sets)</a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="kw">names</span>(mcode_classes)</a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;  [1] &quot;CANCER_BODY_LOCATION&quot;                         </span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt;  [2] &quot;CANCER_DISEASE_STATUS_EVIDENCE_TYPE&quot;          </span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt;  [3] &quot;CANCER_DISORDER&quot;                              </span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt;  [4] &quot;CANCER_RELATED_SURGICAL_PROCEDURE&quot;            </span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt;  [5] &quot;CANCER_STAGING_SYSTEM&quot;                        </span></a>
+<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt;  [6] &quot;COMORBID_CONDITION&quot;                           </span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt;  [7] &quot;CONDITION_STATUS_TREND&quot;                       </span></a>
+<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt;  [8] &quot;HISTOLOGY_MORPHOLOGY_BEHAVIOR&quot;                </span></a>
+<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">#&gt;  [9] &quot;LATERALITY&quot;                                   </span></a>
+<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt; [10] &quot;PRIMARY_OR_UNCERTAIN_BEHAVIOR_CANCER_DISORDER&quot;</span></a>
+<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt; [11] &quot;RADIATION_PROCEDURE&quot;                          </span></a>
+<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="co">#&gt; [12] &quot;RADIATION_TARGET_BODY_SITE&quot;                   </span></a>
+<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="co">#&gt; [13] &quot;SECONDARY_CANCER_DISORDER&quot;                    </span></a>
+<a class="sourceLine" id="cb6-26" data-line-number="26"><span class="co">#&gt; [14] &quot;TREATMENT_INTENT&quot;                             </span></a>
+<a class="sourceLine" id="cb6-27" data-line-number="27"><span class="co">#&gt; [15] &quot;TREATMENT_TERMINATION_REASON&quot;                 </span></a>
+<a class="sourceLine" id="cb6-28" data-line-number="28"><span class="co">#&gt; [16] &quot;YES_NO_UNKNOWN&quot;                               </span></a>
+<a class="sourceLine" id="cb6-29" data-line-number="29"><span class="co">#&gt; [17] &quot;CANCER_STAGING&quot;                               </span></a>
+<a class="sourceLine" id="cb6-30" data-line-number="30"><span class="co">#&gt; [18] &quot;GENOMICS&quot;                                     </span></a>
+<a class="sourceLine" id="cb6-31" data-line-number="31"><span class="co">#&gt; [19] &quot;TUMOR_MARKER_MEASUREMENT&quot;                     </span></a>
+<a class="sourceLine" id="cb6-32" data-line-number="32"><span class="co">#&gt; [20] &quot;SPECIMEN&quot;                                     </span></a>
+<a class="sourceLine" id="cb6-33" data-line-number="33"><span class="co">#&gt; [21] &quot;UNITS_OF_MEASUREMENT&quot;</span></a></code></pre></div>
+<p>All the concepts in each class are converted to the <code>chariot</code> package’s <code>strip</code> format to represent them as single instances in OWL. For the <code>SPECIMEN</code> class specifically, the original mCode <code>code</code> and <code>code description</code> are carried over as instances to provide the appropriate gap coverage in the specimen representation.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">mcode_classes2 &lt;-</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">mcode_classes <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="st">  </span><span class="kw">map</span>(mutate_all, as.character) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="st">  </span><span class="kw">bind_rows</span>(<span class="dt">.id =</span> <span class="st">&quot;class&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">  </span>chariot<span class="op">::</span><span class="kw">merge_strip</span>(<span class="dt">into =</span> <span class="st">&quot;concept&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="st">  </span><span class="co"># Specimen domain has additional columns</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="st">  </span><span class="kw">unite</span>(</a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">    <span class="dt">col =</span> <span class="st">&quot;mcode_concept&quot;</span>, </a>
+<a class="sourceLine" id="cb7-9" data-line-number="9">    code, code_description, </a>
+<a class="sourceLine" id="cb7-10" data-line-number="10">    <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>, </a>
+<a class="sourceLine" id="cb7-11" data-line-number="11">    <span class="dt">remove =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb7-12" data-line-number="12">    <span class="dt">na.rm =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13">    ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">concept =</span> <span class="kw">coalesce</span>(concept, Specimen, mcode_concept)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="st">  </span><span class="kw">distinct</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="st">  </span>rubix<span class="op">::</span><span class="kw">split_by</span>(<span class="dt">col =</span> <span class="st">&quot;class&quot;</span>)</a></code></pre></div>
+<p>The data is written to an Excel to load when calling the <code>data</code> function.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">file &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="kw">getwd</span>(), <span class="st">&quot;data-raw/mcode_rdf.xlsx&quot;</span>)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="cf">if</span> (<span class="op">!</span><span class="kw">file.exists</span>(file)) {</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">  openxlsx<span class="op">::</span><span class="kw">write.xlsx</span>(<span class="dt">x =</span> mcode_classes2,</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">                       <span class="dt">file =</span> file)</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">}</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; Warning in openxlsx::write.xlsx(x = mcode_classes2, file = file): Truncating</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; list names to 31 characters.</span></a></code></pre></div>
+<div id="data-glossary" class="section level1">
+<h1>Data Glossary</h1>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">mcode_classes3 &lt;-</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span>mcode_classes2 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="st">  </span><span class="kw">map</span>(select, concept)</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">mcode_classes3</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt; $CANCER_BODY_LOCATION</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt; # A tibble: 42,022 x 1</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt;    concept                                                                      </span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt;    &lt;chr&gt;                                                                        </span></a>
+<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#&gt;  1 [V] [S] 4048384 Body structure [SNOMED 123037004] [Spec Anatomic Site] [Body…</span></a>
+<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt;  2 [V] [S] 4002852 Buccal embrasure [SNOMED 110326006] [Spec Anatomic Site] [Bo…</span></a>
+<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt;  3 [V] [S] 36717763 Skin structure of left lower eyelid [SNOMED 719884003] [Spe…</span></a>
+<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt;  4 [V] [S] 4230944 Adenofibrosis [SNOMED 89115006] [Observation] [Morph Abnorma…</span></a>
+<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt;  5 [V] [S] 42605189 Intervertebral foramen of eighteenth thoracic vertebra [SNO…</span></a>
+<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co">#&gt;  6 [V] [S] 4097829 Transitional cell carcinoma [SNOMED 27090000] [Observation] …</span></a>
+<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt;  7 [V] [S] 4265989 Structure of medial nuclei of hypothalamus [SNOMED 36501001]…</span></a>
+<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt;  8 [V] [S] 4143459 Structure of subarachnoid space of brain [SNOMED 33930006] […</span></a>
+<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt;  9 [V] [S] 4093877 Entire body of second thoracic vertebra [SNOMED 280839007] […</span></a>
+<a class="sourceLine" id="cb9-18" data-line-number="18"><span class="co">#&gt; 10 [V] [S] 4300995 Structure of suprarenal vein [SNOMED 77905000] [Spec Anatomi…</span></a>
+<a class="sourceLine" id="cb9-19" data-line-number="19"><span class="co">#&gt; # … with 42,012 more rows</span></a>
+<a class="sourceLine" id="cb9-20" data-line-number="20"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-21" data-line-number="21"><span class="co">#&gt; $CANCER_DISEASE_STATUS_EVIDENCE_TYPE</span></a>
+<a class="sourceLine" id="cb9-22" data-line-number="22"><span class="co">#&gt; # A tibble: 6 x 1</span></a>
+<a class="sourceLine" id="cb9-23" data-line-number="23"><span class="co">#&gt;   concept                                                                       </span></a>
+<a class="sourceLine" id="cb9-24" data-line-number="24"><span class="co">#&gt;   &lt;chr&gt;                                                                         </span></a>
+<a class="sourceLine" id="cb9-25" data-line-number="25"><span class="co">#&gt; 1 [V] [S] 4180938 Imaging [SNOMED 363679005] [Procedure] [Procedure]            </span></a>
+<a class="sourceLine" id="cb9-26" data-line-number="26"><span class="co">#&gt; 2 [V] [S] 4098214 Histopathology test [SNOMED 252416005] [Measurement] [Procedu…</span></a>
+<a class="sourceLine" id="cb9-27" data-line-number="27"><span class="co">#&gt; 3 [V] [S] 46272623 Assessment of symptom control [SNOMED 711015009] [Procedure]…</span></a>
+<a class="sourceLine" id="cb9-28" data-line-number="28"><span class="co">#&gt; 4 [V] [S] 4240345 Physical examination [SNOMED 5880005] [Procedure] [Procedure] </span></a>
+<a class="sourceLine" id="cb9-29" data-line-number="29"><span class="co">#&gt; 5 [V] [S] 4353605 Tumor marker measurement [SNOMED 250724005] [Measurement] [Pr…</span></a>
+<a class="sourceLine" id="cb9-30" data-line-number="30"><span class="co">#&gt; 6 [V] [S] 4303425 Laboratory data interpretation [SNOMED 386344002] [Procedure]…</span></a>
+<a class="sourceLine" id="cb9-31" data-line-number="31"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-32" data-line-number="32"><span class="co">#&gt; $CANCER_DISORDER</span></a>
+<a class="sourceLine" id="cb9-33" data-line-number="33"><span class="co">#&gt; # A tibble: 58,222 x 1</span></a>
+<a class="sourceLine" id="cb9-34" data-line-number="34"><span class="co">#&gt;    concept                                                                      </span></a>
+<a class="sourceLine" id="cb9-35" data-line-number="35"><span class="co">#&gt;    &lt;chr&gt;                                                                        </span></a>
+<a class="sourceLine" id="cb9-36" data-line-number="36"><span class="co">#&gt;  1 [V] [N] 35206047 Malignant neoplasm of external upper lip [ICD10CM C00.0] [C…</span></a>
+<a class="sourceLine" id="cb9-37" data-line-number="37"><span class="co">#&gt;  2 [V] [N] 35206048 Malignant neoplasm of external lower lip [ICD10CM C00.1] [C…</span></a>
+<a class="sourceLine" id="cb9-38" data-line-number="38"><span class="co">#&gt;  3 [V] [N] 35206049 Malignant neoplasm of external lip, unspecified [ICD10CM C0…</span></a>
+<a class="sourceLine" id="cb9-39" data-line-number="39"><span class="co">#&gt;  4 [V] [N] 35206050 Malignant neoplasm of upper lip, inner aspect [ICD10CM C00.…</span></a>
+<a class="sourceLine" id="cb9-40" data-line-number="40"><span class="co">#&gt;  5 [V] [N] 35206051 Malignant neoplasm of lower lip, inner aspect [ICD10CM C00.…</span></a>
+<a class="sourceLine" id="cb9-41" data-line-number="41"><span class="co">#&gt;  6 [V] [N] 35206052 Malignant neoplasm of lip, unspecified, inner aspect [ICD10…</span></a>
+<a class="sourceLine" id="cb9-42" data-line-number="42"><span class="co">#&gt;  7 [V] [N] 35206053 Malignant neoplasm of commissure of lip, unspecified [ICD10…</span></a>
+<a class="sourceLine" id="cb9-43" data-line-number="43"><span class="co">#&gt;  8 [V] [N] 35206054 Malignant neoplasm of overlapping sites of lip [ICD10CM C00…</span></a>
+<a class="sourceLine" id="cb9-44" data-line-number="44"><span class="co">#&gt;  9 [V] [N] 35206055 Malignant neoplasm of lip, unspecified [ICD10CM C00.9] [Con…</span></a>
+<a class="sourceLine" id="cb9-45" data-line-number="45"><span class="co">#&gt; 10 [V] [N] 35206056 Malignant neoplasm of base of tongue [ICD10CM C01] [Conditi…</span></a>
+<a class="sourceLine" id="cb9-46" data-line-number="46"><span class="co">#&gt; # … with 58,212 more rows</span></a>
+<a class="sourceLine" id="cb9-47" data-line-number="47"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-48" data-line-number="48"><span class="co">#&gt; $CANCER_RELATED_SURGICAL_PROCEDURE</span></a>
+<a class="sourceLine" id="cb9-49" data-line-number="49"><span class="co">#&gt; # A tibble: 162 x 1</span></a>
+<a class="sourceLine" id="cb9-50" data-line-number="50"><span class="co">#&gt;    concept                                                                      </span></a>
+<a class="sourceLine" id="cb9-51" data-line-number="51"><span class="co">#&gt;    &lt;chr&gt;                                                                        </span></a>
+<a class="sourceLine" id="cb9-52" data-line-number="52"><span class="co">#&gt;  1 [V] [S] 4067441 Destruction of lesion of anus [SNOMED 174337000] [Procedure]…</span></a>
+<a class="sourceLine" id="cb9-53" data-line-number="53"><span class="co">#&gt;  2 [V] [S] 4171194 Excision of lesion of anus [SNOMED 49264007] [Procedure] [Pr…</span></a>
+<a class="sourceLine" id="cb9-54" data-line-number="54"><span class="co">#&gt;  3 [V] [S] 4002559 Anus excision [SNOMED 119894003] [Procedure] [Procedure]     </span></a>
+<a class="sourceLine" id="cb9-55" data-line-number="55"><span class="co">#&gt;  4 [V] [S] 4087575 Operation on anus [SNOMED 24265000] [Procedure] [Procedure]  </span></a>
+<a class="sourceLine" id="cb9-56" data-line-number="56"><span class="co">#&gt;  5 [V] [S] 4170198 Destruction of lesion of bladder [SNOMED 48185007] [Procedur…</span></a>
+<a class="sourceLine" id="cb9-57" data-line-number="57"><span class="co">#&gt;  6 [V] [S] 4029571 Bladder excision [SNOMED 108034003] [Procedure] [Procedure]  </span></a>
+<a class="sourceLine" id="cb9-58" data-line-number="58"><span class="co">#&gt;  7 [V] [S] 4010266 Partial cystectomy [SNOMED 112902005] [Procedure] [Procedure]</span></a>
+<a class="sourceLine" id="cb9-59" data-line-number="59"><span class="co">#&gt;  8 [V] [S] 4270496 Complete cystectomy [SNOMED 63016009] [Procedure] [Procedure]</span></a>
+<a class="sourceLine" id="cb9-60" data-line-number="60"><span class="co">#&gt;  9 [V] [S] 4273866 Radical cystectomy [SNOMED 64063003] [Procedure] [Procedure] </span></a>
+<a class="sourceLine" id="cb9-61" data-line-number="61"><span class="co">#&gt; 10 [V] [S] 4119922 Urinary bladder reconstruction [SNOMED 287716007] [Procedure…</span></a>
+<a class="sourceLine" id="cb9-62" data-line-number="62"><span class="co">#&gt; # … with 152 more rows</span></a>
+<a class="sourceLine" id="cb9-63" data-line-number="63"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-64" data-line-number="64"><span class="co">#&gt; $CANCER_STAGING</span></a>
+<a class="sourceLine" id="cb9-65" data-line-number="65"><span class="co">#&gt; # A tibble: 1,617 x 1</span></a>
+<a class="sourceLine" id="cb9-66" data-line-number="66"><span class="co">#&gt;    concept                                                                      </span></a>
+<a class="sourceLine" id="cb9-67" data-line-number="67"><span class="co">#&gt;    &lt;chr&gt;                                                                        </span></a>
+<a class="sourceLine" id="cb9-68" data-line-number="68"><span class="co">#&gt;  1 [V] [S] 1537692 Vulvar Cancer cM1 TNM Finding by AJCC/UICC 8th edition [NCIt…</span></a>
+<a class="sourceLine" id="cb9-69" data-line-number="69"><span class="co">#&gt;  2 [V] [S] 1537780 Retinoblastoma cM0 TNM Finding by AJCC/UICC 8th edition [NCI…</span></a>
+<a class="sourceLine" id="cb9-70" data-line-number="70"><span class="co">#&gt;  3 [V] [S] 1537798 Eyelid Carcinoma pM1 TNM Finding by AJCC/UICC 8th edition [N…</span></a>
+<a class="sourceLine" id="cb9-71" data-line-number="71"><span class="co">#&gt;  4 [V] [S] 1537804 Uterine Corpus Leiomyosarcoma and Endometrial Stromal Sarcom…</span></a>
+<a class="sourceLine" id="cb9-72" data-line-number="72"><span class="co">#&gt;  5 [V] [S] 1537805 Esophagus and Esophagogastric Junction Cancer cM1 TNM Findin…</span></a>
+<a class="sourceLine" id="cb9-73" data-line-number="73"><span class="co">#&gt;  6 [V] [S] 1537808 Duodenum and Ampulla of Vater Neuroendocrine Tumor cM1c TNM …</span></a>
+<a class="sourceLine" id="cb9-74" data-line-number="74"><span class="co">#&gt;  7 [V] [S] 1537809 Bone Cancer pM1b TNM Finding by AJCC/UICC 8th edition [NCIt …</span></a>
+<a class="sourceLine" id="cb9-75" data-line-number="75"><span class="co">#&gt;  8 [V] [S] 1537821 Merkel Cell Carcinoma pM1 TNM Finding by AJCC/UICC 8th editi…</span></a>
+<a class="sourceLine" id="cb9-76" data-line-number="76"><span class="co">#&gt;  9 [V] [S] 1537827 Jejunum and Ileum Neuroendocrine Tumor cM0 TNM Finding by AJ…</span></a>
+<a class="sourceLine" id="cb9-77" data-line-number="77"><span class="co">#&gt; 10 [V] [S] 1537830 Thymic Tumor pM1 TNM Finding by AJCC/UICC 8th edition [NCIt …</span></a>
+<a class="sourceLine" id="cb9-78" data-line-number="78"><span class="co">#&gt; # … with 1,607 more rows</span></a>
+<a class="sourceLine" id="cb9-79" data-line-number="79"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-80" data-line-number="80"><span class="co">#&gt; $CANCER_STAGING_SYSTEM</span></a>
+<a class="sourceLine" id="cb9-81" data-line-number="81"><span class="co">#&gt; # A tibble: 3 x 1</span></a>
+<a class="sourceLine" id="cb9-82" data-line-number="82"><span class="co">#&gt;   concept                                                                       </span></a>
+<a class="sourceLine" id="cb9-83" data-line-number="83"><span class="co">#&gt;   &lt;chr&gt;                                                                         </span></a>
+<a class="sourceLine" id="cb9-84" data-line-number="84"><span class="co">#&gt; 1 [V] [S] 40485522 American Joint Commission on Cancer, Cancer Staging Manual, …</span></a>
+<a class="sourceLine" id="cb9-85" data-line-number="85"><span class="co">#&gt; 2 [V] [S] 40483646 American Joint Commission on Cancer, Cancer Staging Manual, …</span></a>
+<a class="sourceLine" id="cb9-86" data-line-number="86"><span class="co">#&gt; 3 [V] [S] 4123019 UICC [SNOMED 258235000] [Measurement] [Staging / Scales]      </span></a>
+<a class="sourceLine" id="cb9-87" data-line-number="87"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-88" data-line-number="88"><span class="co">#&gt; $COMORBID_CONDITION</span></a>
+<a class="sourceLine" id="cb9-89" data-line-number="89"><span class="co">#&gt; # A tibble: 22,874 x 1</span></a>
+<a class="sourceLine" id="cb9-90" data-line-number="90"><span class="co">#&gt;    concept                                                                      </span></a>
+<a class="sourceLine" id="cb9-91" data-line-number="91"><span class="co">#&gt;    &lt;chr&gt;                                                                        </span></a>
+<a class="sourceLine" id="cb9-92" data-line-number="92"><span class="co">#&gt;  1 [V] [N] 45537731 Syphilitic endocarditis [ICD10CM A52.03] [Condition] [5-cha…</span></a>
+<a class="sourceLine" id="cb9-93" data-line-number="93"><span class="co">#&gt;  2 [V] [N] 35205769 Chronic viral hepatitis B with delta-agent [ICD10CM B18.0] …</span></a>
+<a class="sourceLine" id="cb9-94" data-line-number="94"><span class="co">#&gt;  3 [V] [N] 35205770 Chronic viral hepatitis B without delta-agent [ICD10CM B18.…</span></a>
+<a class="sourceLine" id="cb9-95" data-line-number="95"><span class="co">#&gt;  4 [V] [N] 35205771 Chronic viral hepatitis C [ICD10CM B18.2] [Condition] [4-ch…</span></a>
+<a class="sourceLine" id="cb9-96" data-line-number="96"><span class="co">#&gt;  5 [V] [N] 35205776 Human immunodeficiency virus [HIV] disease [ICD10CM B20] [C…</span></a>
+<a class="sourceLine" id="cb9-97" data-line-number="97"><span class="co">#&gt;  6 [V] [N] 35206047 Malignant neoplasm of external upper lip [ICD10CM C00.0] [C…</span></a>
+<a class="sourceLine" id="cb9-98" data-line-number="98"><span class="co">#&gt;  7 [V] [N] 35206048 Malignant neoplasm of external lower lip [ICD10CM C00.1] [C…</span></a>
+<a class="sourceLine" id="cb9-99" data-line-number="99"><span class="co">#&gt;  8 [V] [N] 35206049 Malignant neoplasm of external lip, unspecified [ICD10CM C0…</span></a>
+<a class="sourceLine" id="cb9-100" data-line-number="100"><span class="co">#&gt;  9 [V] [N] 35206050 Malignant neoplasm of upper lip, inner aspect [ICD10CM C00.…</span></a>
+<a class="sourceLine" id="cb9-101" data-line-number="101"><span class="co">#&gt; 10 [V] [N] 35206051 Malignant neoplasm of lower lip, inner aspect [ICD10CM C00.…</span></a>
+<a class="sourceLine" id="cb9-102" data-line-number="102"><span class="co">#&gt; # … with 22,864 more rows</span></a>
+<a class="sourceLine" id="cb9-103" data-line-number="103"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-104" data-line-number="104"><span class="co">#&gt; $CONDITION_STATUS_TREND</span></a>
+<a class="sourceLine" id="cb9-105" data-line-number="105"><span class="co">#&gt; # A tibble: 5 x 1</span></a>
+<a class="sourceLine" id="cb9-106" data-line-number="106"><span class="co">#&gt;   concept                                                                       </span></a>
+<a class="sourceLine" id="cb9-107" data-line-number="107"><span class="co">#&gt;   &lt;chr&gt;                                                                         </span></a>
+<a class="sourceLine" id="cb9-108" data-line-number="108"><span class="co">#&gt; 1 [V] [S] 9190 Not detected [SNOMED 260415000] [Meas Value] [Qualifier Value]   </span></a>
+<a class="sourceLine" id="cb9-109" data-line-number="109"><span class="co">#&gt; 2 [V] [S] 4149524 Patient's condition improved [SNOMED 268910001] [Condition] […</span></a>
+<a class="sourceLine" id="cb9-110" data-line-number="110"><span class="co">#&gt; 3 [V] [S] 4234874 Patient's condition stable [SNOMED 359746009] [Condition] [Cl…</span></a>
+<a class="sourceLine" id="cb9-111" data-line-number="111"><span class="co">#&gt; 4 [V] [S] 4150631 Patient's condition worsened [SNOMED 271299001] [Condition] […</span></a>
+<a class="sourceLine" id="cb9-112" data-line-number="112"><span class="co">#&gt; 5 [V] [S] 46271098 Patient condition undetermined [SNOMED 709137006] [Condition…</span></a>
+<a class="sourceLine" id="cb9-113" data-line-number="113"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-114" data-line-number="114"><span class="co">#&gt; $GENOMICS</span></a>
+<a class="sourceLine" id="cb9-115" data-line-number="115"><span class="co">#&gt; # A tibble: 27,032 x 1</span></a>
+<a class="sourceLine" id="cb9-116" data-line-number="116"><span class="co">#&gt;    concept                                                                      </span></a>
+<a class="sourceLine" id="cb9-117" data-line-number="117"><span class="co">#&gt;    &lt;chr&gt;                                                                        </span></a>
+<a class="sourceLine" id="cb9-118" data-line-number="118"><span class="co">#&gt;  1 [V] [S] 35944910 CCDC77 (coiled-coil domain containing 77) Variant [HGNC 282…</span></a>
+<a class="sourceLine" id="cb9-119" data-line-number="119"><span class="co">#&gt;  2 [V] [S] 35944911 INMT (indolethylamine N-methyltransferase) Variant [HGNC 60…</span></a>
+<a class="sourceLine" id="cb9-120" data-line-number="120"><span class="co">#&gt;  3 [V] [S] 35944912 ZNF117 (zinc finger protein 117) Variant [HGNC 12897] [Meas…</span></a>
+<a class="sourceLine" id="cb9-121" data-line-number="121"><span class="co">#&gt;  4 [V] [S] 35944913 CKAP2 (cytoskeleton associated protein 2) Variant [HGNC 199…</span></a>
+<a class="sourceLine" id="cb9-122" data-line-number="122"><span class="co">#&gt;  5 [V] [S] 35944914 ITPRIPL2 (ITPRIP like 2) Variant [HGNC 27257] [Measurement]…</span></a>
+<a class="sourceLine" id="cb9-123" data-line-number="123"><span class="co">#&gt;  6 [V] [S] 35944916 PEX19 (peroxisomal biogenesis factor 19) Variant [HGNC 9713…</span></a>
+<a class="sourceLine" id="cb9-124" data-line-number="124"><span class="co">#&gt;  7 [V] [S] 35944917 ZNF385D (zinc finger protein 385D) Variant [HGNC 26191] [Me…</span></a>
+<a class="sourceLine" id="cb9-125" data-line-number="125"><span class="co">#&gt;  8 [V] [S] 35944920 EDDM3B (epididymal protein 3B) Variant [HGNC 19223] [Measur…</span></a>
+<a class="sourceLine" id="cb9-126" data-line-number="126"><span class="co">#&gt;  9 [V] [S] 35944921 KLRC3 (killer cell lectin like receptor C3) Variant [HGNC 6…</span></a>
+<a class="sourceLine" id="cb9-127" data-line-number="127"><span class="co">#&gt; 10 [V] [S] 35944922 GIMAP4 (GTPase, IMAP family member 4) Variant [HGNC 21872] …</span></a>
+<a class="sourceLine" id="cb9-128" data-line-number="128"><span class="co">#&gt; # … with 27,022 more rows</span></a>
+<a class="sourceLine" id="cb9-129" data-line-number="129"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-130" data-line-number="130"><span class="co">#&gt; $HISTOLOGY_MORPHOLOGY_BEHAVIOR</span></a>
+<a class="sourceLine" id="cb9-131" data-line-number="131"><span class="co">#&gt; # A tibble: 1,325 x 1</span></a>
+<a class="sourceLine" id="cb9-132" data-line-number="132"><span class="co">#&gt;    concept                                                                      </span></a>
+<a class="sourceLine" id="cb9-133" data-line-number="133"><span class="co">#&gt;    &lt;chr&gt;                                                                        </span></a>
+<a class="sourceLine" id="cb9-134" data-line-number="134"><span class="co">#&gt;  1 [V] [S] 4264447 Acute myeloid leukemia with multilineage dysplasia following…</span></a>
+<a class="sourceLine" id="cb9-135" data-line-number="135"><span class="co">#&gt;  2 [V] [S] 4029663 Acute myeloid leukemia, 11q23 abnormalities [SNOMED 12882900…</span></a>
+<a class="sourceLine" id="cb9-136" data-line-number="136"><span class="co">#&gt;  3 [V] [S] 37311513 Biphenotypic sinonasal sarcoma [SNOMED 789405004] [Observat…</span></a>
+<a class="sourceLine" id="cb9-137" data-line-number="137"><span class="co">#&gt;  4 [V] [S] 36403182 Papillary carcinoma follicular variant, in situ follicular …</span></a>
+<a class="sourceLine" id="cb9-138" data-line-number="138"><span class="co">#&gt;  5 [V] [S] 4030124 Hepatoid adenocarcinoma [SNOMED 128706007] [Observation] [Mo…</span></a>
+<a class="sourceLine" id="cb9-139" data-line-number="139"><span class="co">#&gt;  6 [V] [S] 4228267 Papillary carcinoma, clear cell [SNOMED 421630008] [Observat…</span></a>
+<a class="sourceLine" id="cb9-140" data-line-number="140"><span class="co">#&gt;  7 [V] [S] 4029175 Prolymphocytic leukemia, T-cell type [SNOMED 128821006] [Obs…</span></a>
+<a class="sourceLine" id="cb9-141" data-line-number="141"><span class="co">#&gt;  8 [V] [S] 4186244 Malignant immunoproliferative neoplasm [SNOMED 414646000] [O…</span></a>
+<a class="sourceLine" id="cb9-142" data-line-number="142"><span class="co">#&gt;  9 [V] [S] 4267422 Malignant aortic body tumor [SNOMED 62512005] [Observation] …</span></a>
+<a class="sourceLine" id="cb9-143" data-line-number="143"><span class="co">#&gt; 10 [V] [S] 4028856 Glomus tumor, malignant [SNOMED 128908003] [Observation] [Mo…</span></a>
+<a class="sourceLine" id="cb9-144" data-line-number="144"><span class="co">#&gt; # … with 1,315 more rows</span></a>
+<a class="sourceLine" id="cb9-145" data-line-number="145"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-146" data-line-number="146"><span class="co">#&gt; $LATERALITY</span></a>
+<a class="sourceLine" id="cb9-147" data-line-number="147"><span class="co">#&gt; # A tibble: 5 x 1</span></a>
+<a class="sourceLine" id="cb9-148" data-line-number="148"><span class="co">#&gt;   concept                                                                       </span></a>
+<a class="sourceLine" id="cb9-149" data-line-number="149"><span class="co">#&gt;   &lt;chr&gt;                                                                         </span></a>
+<a class="sourceLine" id="cb9-150" data-line-number="150"><span class="co">#&gt; 1 [V] [S] 4197258 Right and left [SNOMED 51440002] [Observation] [Qualifier Val…</span></a>
+<a class="sourceLine" id="cb9-151" data-line-number="151"><span class="co">#&gt; 2 [V] [S] 4161551 Midline [SNOMED 399488007] [Observation] [Qualifier Value]    </span></a>
+<a class="sourceLine" id="cb9-152" data-line-number="152"><span class="co">#&gt; 3 [V] [S] 4080761 Right [SNOMED 24028007] [Observation] [Qualifier Value]       </span></a>
+<a class="sourceLine" id="cb9-153" data-line-number="153"><span class="co">#&gt; 4 [V] [S] 4300877 Left [SNOMED 7771000] [Observation] [Qualifier Value]         </span></a>
+<a class="sourceLine" id="cb9-154" data-line-number="154"><span class="co">#&gt; 5 [V] [S] 4280221 Unilateral [SNOMED 66459002] [Observation] [Qualifier Value]  </span></a>
+<a class="sourceLine" id="cb9-155" data-line-number="155"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-156" data-line-number="156"><span class="co">#&gt; $PRIMARY_OR_UNCERTAIN_BEHAVIOR_CANCER_DISORDER</span></a>
+<a class="sourceLine" id="cb9-157" data-line-number="157"><span class="co">#&gt; # A tibble: 55,909 x 1</span></a>
+<a class="sourceLine" id="cb9-158" data-line-number="158"><span class="co">#&gt;    concept                                                                      </span></a>
+<a class="sourceLine" id="cb9-159" data-line-number="159"><span class="co">#&gt;    &lt;chr&gt;                                                                        </span></a>
+<a class="sourceLine" id="cb9-160" data-line-number="160"><span class="co">#&gt;  1 [V] [N] 35206047 Malignant neoplasm of external upper lip [ICD10CM C00.0] [C…</span></a>
+<a class="sourceLine" id="cb9-161" data-line-number="161"><span class="co">#&gt;  2 [V] [N] 35206048 Malignant neoplasm of external lower lip [ICD10CM C00.1] [C…</span></a>
+<a class="sourceLine" id="cb9-162" data-line-number="162"><span class="co">#&gt;  3 [V] [N] 35206049 Malignant neoplasm of external lip, unspecified [ICD10CM C0…</span></a>
+<a class="sourceLine" id="cb9-163" data-line-number="163"><span class="co">#&gt;  4 [V] [N] 35206050 Malignant neoplasm of upper lip, inner aspect [ICD10CM C00.…</span></a>
+<a class="sourceLine" id="cb9-164" data-line-number="164"><span class="co">#&gt;  5 [V] [N] 35206051 Malignant neoplasm of lower lip, inner aspect [ICD10CM C00.…</span></a>
+<a class="sourceLine" id="cb9-165" data-line-number="165"><span class="co">#&gt;  6 [V] [N] 35206052 Malignant neoplasm of lip, unspecified, inner aspect [ICD10…</span></a>
+<a class="sourceLine" id="cb9-166" data-line-number="166"><span class="co">#&gt;  7 [V] [N] 35206053 Malignant neoplasm of commissure of lip, unspecified [ICD10…</span></a>
+<a class="sourceLine" id="cb9-167" data-line-number="167"><span class="co">#&gt;  8 [V] [N] 35206054 Malignant neoplasm of overlapping sites of lip [ICD10CM C00…</span></a>
+<a class="sourceLine" id="cb9-168" data-line-number="168"><span class="co">#&gt;  9 [V] [N] 35206055 Malignant neoplasm of lip, unspecified [ICD10CM C00.9] [Con…</span></a>
+<a class="sourceLine" id="cb9-169" data-line-number="169"><span class="co">#&gt; 10 [V] [N] 35206056 Malignant neoplasm of base of tongue [ICD10CM C01] [Conditi…</span></a>
+<a class="sourceLine" id="cb9-170" data-line-number="170"><span class="co">#&gt; # … with 55,899 more rows</span></a>
+<a class="sourceLine" id="cb9-171" data-line-number="171"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-172" data-line-number="172"><span class="co">#&gt; $RADIATION_PROCEDURE</span></a>
+<a class="sourceLine" id="cb9-173" data-line-number="173"><span class="co">#&gt; # A tibble: 5 x 1</span></a>
+<a class="sourceLine" id="cb9-174" data-line-number="174"><span class="co">#&gt;   concept                                                                       </span></a>
+<a class="sourceLine" id="cb9-175" data-line-number="175"><span class="co">#&gt;   &lt;chr&gt;                                                                         </span></a>
+<a class="sourceLine" id="cb9-176" data-line-number="176"><span class="co">#&gt; 1 [V] [S] 40489482 Megavoltage radiation therapy using photons [SNOMED 44838500…</span></a>
+<a class="sourceLine" id="cb9-177" data-line-number="177"><span class="co">#&gt; 2 [V] [S] 4165039 Teleradiotherapy using electrons [SNOMED 45643008] [Procedure…</span></a>
+<a class="sourceLine" id="cb9-178" data-line-number="178"><span class="co">#&gt; 3 [V] [S] 4024005 Teleradiotherapy protons [SNOMED 10611004] [Procedure] [Proce…</span></a>
+<a class="sourceLine" id="cb9-179" data-line-number="179"><span class="co">#&gt; 4 [V] [S] 4213601 Teleradiotherapy neutrons [SNOMED 80347004] [Procedure] [Proc…</span></a>
+<a class="sourceLine" id="cb9-180" data-line-number="180"><span class="co">#&gt; 5 [V] [S] 40317890 Brachytherapy [SNOMED 152198000] [Procedure] [Procedure]     </span></a>
+<a class="sourceLine" id="cb9-181" data-line-number="181"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-182" data-line-number="182"><span class="co">#&gt; $RADIATION_TARGET_BODY_SITE</span></a>
+<a class="sourceLine" id="cb9-183" data-line-number="183"><span class="co">#&gt; # A tibble: 66 x 1</span></a>
+<a class="sourceLine" id="cb9-184" data-line-number="184"><span class="co">#&gt;    concept                                                                      </span></a>
+<a class="sourceLine" id="cb9-185" data-line-number="185"><span class="co">#&gt;    &lt;chr&gt;                                                                        </span></a>
+<a class="sourceLine" id="cb9-186" data-line-number="186"><span class="co">#&gt;  1 [V] [S] 4215878 Cervical lymph node structure [SNOMED 81105003] [Spec Anatom…</span></a>
+<a class="sourceLine" id="cb9-187" data-line-number="187"><span class="co">#&gt;  2 [V] [S] 4055510 Entire lymph node of thorax [SNOMED 196374005] [Spec Anatomi…</span></a>
+<a class="sourceLine" id="cb9-188" data-line-number="188"><span class="co">#&gt;  3 [V] [S] 4074816 Axillary lymph node group [SNOMED 245269009] [Spec Anatomic …</span></a>
+<a class="sourceLine" id="cb9-189" data-line-number="189"><span class="co">#&gt;  4 [V] [S] 4075241 Supraclavicular lymph node group [SNOMED 245265003] [Spec An…</span></a>
+<a class="sourceLine" id="cb9-190" data-line-number="190"><span class="co">#&gt;  5 [V] [S] 4075246 Internal mammary lymph node group [SNOMED 245282001] [Spec A…</span></a>
+<a class="sourceLine" id="cb9-191" data-line-number="191"><span class="co">#&gt;  6 [V] [S] 4075247 Abdominal lymph node group [SNOMED 245284000] [Spec Anatomic…</span></a>
+<a class="sourceLine" id="cb9-192" data-line-number="192"><span class="co">#&gt;  7 [V] [S] 4081786 Pelvic lymph node group [SNOMED 245294005] [Spec Anatomic Si…</span></a>
+<a class="sourceLine" id="cb9-193" data-line-number="193"><span class="co">#&gt;  8 [V] [S] 4241958 Structure of lymph node [SNOMED 59441001] [Spec Anatomic Sit…</span></a>
+<a class="sourceLine" id="cb9-194" data-line-number="194"><span class="co">#&gt;  9 [V] [S] 4353165 Entire eye [SNOMED 244486005] [Spec Anatomic Site] [Body Str…</span></a>
+<a class="sourceLine" id="cb9-195" data-line-number="195"><span class="co">#&gt; 10 [V] [S] 4209428 Pituitary structure [SNOMED 56329008] [Spec Anatomic Site] […</span></a>
+<a class="sourceLine" id="cb9-196" data-line-number="196"><span class="co">#&gt; # … with 56 more rows</span></a>
+<a class="sourceLine" id="cb9-197" data-line-number="197"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-198" data-line-number="198"><span class="co">#&gt; $SECONDARY_CANCER_DISORDER</span></a>
+<a class="sourceLine" id="cb9-199" data-line-number="199"><span class="co">#&gt; # A tibble: 909 x 1</span></a>
+<a class="sourceLine" id="cb9-200" data-line-number="200"><span class="co">#&gt;    concept                                                                      </span></a>
+<a class="sourceLine" id="cb9-201" data-line-number="201"><span class="co">#&gt;    &lt;chr&gt;                                                                        </span></a>
+<a class="sourceLine" id="cb9-202" data-line-number="202"><span class="co">#&gt;  1 [V] [N] 45532940 Secondary carcinoid tumors, unspecified site [ICD10CM C7B.0…</span></a>
+<a class="sourceLine" id="cb9-203" data-line-number="203"><span class="co">#&gt;  2 [V] [N] 45552289 Secondary carcinoid tumors of distant lymph nodes [ICD10CM …</span></a>
+<a class="sourceLine" id="cb9-204" data-line-number="204"><span class="co">#&gt;  3 [V] [N] 45542632 Secondary carcinoid tumors of liver [ICD10CM C7B.02] [Condi…</span></a>
+<a class="sourceLine" id="cb9-205" data-line-number="205"><span class="co">#&gt;  4 [V] [N] 45542633 Secondary carcinoid tumors of bone [ICD10CM C7B.03] [Condit…</span></a>
+<a class="sourceLine" id="cb9-206" data-line-number="206"><span class="co">#&gt;  5 [V] [N] 45532941 Secondary carcinoid tumors of peritoneum [ICD10CM C7B.04] […</span></a>
+<a class="sourceLine" id="cb9-207" data-line-number="207"><span class="co">#&gt;  6 [V] [N] 45600534 Secondary carcinoid tumors of other sites [ICD10CM C7B.09] …</span></a>
+<a class="sourceLine" id="cb9-208" data-line-number="208"><span class="co">#&gt;  7 [V] [N] 45566619 Secondary Merkel cell carcinoma [ICD10CM C7B.1] [Condition]…</span></a>
+<a class="sourceLine" id="cb9-209" data-line-number="209"><span class="co">#&gt;  8 [V] [N] 45571543 Other secondary neuroendocrine tumors [ICD10CM C7B.8] [Cond…</span></a>
+<a class="sourceLine" id="cb9-210" data-line-number="210"><span class="co">#&gt;  9 [V] [N] 35206319 Secondary and unspecified malignant neoplasm of lymph nodes…</span></a>
+<a class="sourceLine" id="cb9-211" data-line-number="211"><span class="co">#&gt; 10 [V] [N] 35206320 Secondary and unspecified malignant neoplasm of intrathorac…</span></a>
+<a class="sourceLine" id="cb9-212" data-line-number="212"><span class="co">#&gt; # … with 899 more rows</span></a>
+<a class="sourceLine" id="cb9-213" data-line-number="213"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-214" data-line-number="214"><span class="co">#&gt; $SPECIMEN</span></a>
+<a class="sourceLine" id="cb9-215" data-line-number="215"><span class="co">#&gt; # A tibble: 3,928 x 1</span></a>
+<a class="sourceLine" id="cb9-216" data-line-number="216"><span class="co">#&gt;    concept                             </span></a>
+<a class="sourceLine" id="cb9-217" data-line-number="217"><span class="co">#&gt;    &lt;chr&gt;                               </span></a>
+<a class="sourceLine" id="cb9-218" data-line-number="218"><span class="co">#&gt;  1 [V] [N] 1027716 NA [NA NA] [NA] [NA]</span></a>
+<a class="sourceLine" id="cb9-219" data-line-number="219"><span class="co">#&gt;  2 [V] [N] 1032268 NA [NA NA] [NA] [NA]</span></a>
+<a class="sourceLine" id="cb9-220" data-line-number="220"><span class="co">#&gt;  3 [V] [N] 1033195 NA [NA NA] [NA] [NA]</span></a>
+<a class="sourceLine" id="cb9-221" data-line-number="221"><span class="co">#&gt;  4 [V] [N] 1033465 NA [NA NA] [NA] [NA]</span></a>
+<a class="sourceLine" id="cb9-222" data-line-number="222"><span class="co">#&gt;  5 [V] [N] 1033739 NA [NA NA] [NA] [NA]</span></a>
+<a class="sourceLine" id="cb9-223" data-line-number="223"><span class="co">#&gt;  6 [V] [N] 1585831 NA [NA NA] [NA] [NA]</span></a>
+<a class="sourceLine" id="cb9-224" data-line-number="224"><span class="co">#&gt;  7 [V] [N] 1585833 NA [NA NA] [NA] [NA]</span></a>
+<a class="sourceLine" id="cb9-225" data-line-number="225"><span class="co">#&gt;  8 [V] [N] 3310432 NA [NA NA] [NA] [NA]</span></a>
+<a class="sourceLine" id="cb9-226" data-line-number="226"><span class="co">#&gt;  9 [V] [N] 3311979 NA [NA NA] [NA] [NA]</span></a>
+<a class="sourceLine" id="cb9-227" data-line-number="227"><span class="co">#&gt; 10 [V] [N] 3326584 NA [NA NA] [NA] [NA]</span></a>
+<a class="sourceLine" id="cb9-228" data-line-number="228"><span class="co">#&gt; # … with 3,918 more rows</span></a>
+<a class="sourceLine" id="cb9-229" data-line-number="229"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-230" data-line-number="230"><span class="co">#&gt; $TREATMENT_INTENT</span></a>
+<a class="sourceLine" id="cb9-231" data-line-number="231"><span class="co">#&gt; # A tibble: 2 x 1</span></a>
+<a class="sourceLine" id="cb9-232" data-line-number="232"><span class="co">#&gt;   concept                                                                       </span></a>
+<a class="sourceLine" id="cb9-233" data-line-number="233"><span class="co">#&gt;   &lt;chr&gt;                                                                         </span></a>
+<a class="sourceLine" id="cb9-234" data-line-number="234"><span class="co">#&gt; 1 [V] [S] 4162591 Curative - procedure intent [SNOMED 373808002] [Observation] …</span></a>
+<a class="sourceLine" id="cb9-235" data-line-number="235"><span class="co">#&gt; 2 [V] [S] 4179711 Palliative intent [SNOMED 363676003] [Observation] [Qualifier…</span></a>
+<a class="sourceLine" id="cb9-236" data-line-number="236"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-237" data-line-number="237"><span class="co">#&gt; $TREATMENT_TERMINATION_REASON</span></a>
+<a class="sourceLine" id="cb9-238" data-line-number="238"><span class="co">#&gt; # A tibble: 7 x 1</span></a>
+<a class="sourceLine" id="cb9-239" data-line-number="239"><span class="co">#&gt;   concept                                                                       </span></a>
+<a class="sourceLine" id="cb9-240" data-line-number="240"><span class="co">#&gt;   &lt;chr&gt;                                                                         </span></a>
+<a class="sourceLine" id="cb9-241" data-line-number="241"><span class="co">#&gt; 1 [V] [S] 4082735 Treatment completed [SNOMED 182992009] [Observation] [Procedu…</span></a>
+<a class="sourceLine" id="cb9-242" data-line-number="242"><span class="co">#&gt; 2 [V] [S] 4243225 Lack of drug action [SNOMED 58848006] [Observation] [Clinical…</span></a>
+<a class="sourceLine" id="cb9-243" data-line-number="243"><span class="co">#&gt; 3 [V] [S] 4105886 Adverse reaction [SNOMED 281647001] [Condition] [Clinical Fin…</span></a>
+<a class="sourceLine" id="cb9-244" data-line-number="244"><span class="co">#&gt; 4 [V] [S] 4052625 Financial problem [SNOMED 160932005] [Observation] [Clinical …</span></a>
+<a class="sourceLine" id="cb9-245" data-line-number="245"><span class="co">#&gt; 5 [V] [S] 4019958 Refusal of treatment by patient [SNOMED 105480006] [Observati…</span></a>
+<a class="sourceLine" id="cb9-246" data-line-number="246"><span class="co">#&gt; 6 [V] [S] 4030023 Patient transfer [SNOMED 107724000] [Observation] [Procedure] </span></a>
+<a class="sourceLine" id="cb9-247" data-line-number="247"><span class="co">#&gt; 7 [V] [S] 4146955 Treatment not available [SNOMED 309846006] [Observation] [Con…</span></a>
+<a class="sourceLine" id="cb9-248" data-line-number="248"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-249" data-line-number="249"><span class="co">#&gt; $TUMOR_MARKER_MEASUREMENT</span></a>
+<a class="sourceLine" id="cb9-250" data-line-number="250"><span class="co">#&gt; # A tibble: 160 x 1</span></a>
+<a class="sourceLine" id="cb9-251" data-line-number="251"><span class="co">#&gt;    concept                                                                      </span></a>
+<a class="sourceLine" id="cb9-252" data-line-number="252"><span class="co">#&gt;    &lt;chr&gt;                                                                        </span></a>
+<a class="sourceLine" id="cb9-253" data-line-number="253"><span class="co">#&gt;  1 [V] [S] 3005148 5-Hydroxyindoleacetate [Mass/time] in 24 hour Urine [LOINC 1…</span></a>
+<a class="sourceLine" id="cb9-254" data-line-number="254"><span class="co">#&gt;  2 [V] [S] 3023028 5-Hydroxyindoleacetate [Mass/volume] in 24 hour Urine [LOINC…</span></a>
+<a class="sourceLine" id="cb9-255" data-line-number="255"><span class="co">#&gt;  3 [V] [S] 3014670 5-Hydroxyindoleacetate [Mass/volume] in Cerebral spinal flui…</span></a>
+<a class="sourceLine" id="cb9-256" data-line-number="256"><span class="co">#&gt;  4 [V] [S] 3021106 5-Hydroxyindoleacetate [Mass/volume] in Serum or Plasma [LOI…</span></a>
+<a class="sourceLine" id="cb9-257" data-line-number="257"><span class="co">#&gt;  5 [V] [S] 3021385 5-Hydroxyindoleacetate [Mass/volume] in Urine [LOINC 1694-9]…</span></a>
+<a class="sourceLine" id="cb9-258" data-line-number="258"><span class="co">#&gt;  6 [V] [S] 43055680 5-Hydroxyindoleacetate [Mass/volume] in Urine by Confirmato…</span></a>
+<a class="sourceLine" id="cb9-259" data-line-number="259"><span class="co">#&gt;  7 [V] [S] 3009461 5-Hydroxyindoleacetate [Moles/time] in 24 hour Urine [LOINC …</span></a>
+<a class="sourceLine" id="cb9-260" data-line-number="260"><span class="co">#&gt;  8 [V] [S] 3010801 5-Hydroxyindoleacetate [Moles/volume] in 24 hour Urine [LOIN…</span></a>
+<a class="sourceLine" id="cb9-261" data-line-number="261"><span class="co">#&gt;  9 [V] [S] 3051403 5-Hydroxyindoleacetate [Moles/volume] in Cerebral spinal flu…</span></a>
+<a class="sourceLine" id="cb9-262" data-line-number="262"><span class="co">#&gt; 10 [V] [S] 44816667 5-Hydroxyindoleacetate [Moles/volume] in Platelet rich plas…</span></a>
+<a class="sourceLine" id="cb9-263" data-line-number="263"><span class="co">#&gt; # … with 150 more rows</span></a>
+<a class="sourceLine" id="cb9-264" data-line-number="264"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-265" data-line-number="265"><span class="co">#&gt; $UNITS_OF_MEASUREMENT</span></a>
+<a class="sourceLine" id="cb9-266" data-line-number="266"><span class="co">#&gt; # A tibble: 1,011 x 1</span></a>
+<a class="sourceLine" id="cb9-267" data-line-number="267"><span class="co">#&gt;    concept                                                                      </span></a>
+<a class="sourceLine" id="cb9-268" data-line-number="268"><span class="co">#&gt;    &lt;chr&gt;                                                                        </span></a>
+<a class="sourceLine" id="cb9-269" data-line-number="269"><span class="co">#&gt;  1 pm Picometer                                                                 </span></a>
+<a class="sourceLine" id="cb9-270" data-line-number="270"><span class="co">#&gt;  2 nm Nanometer                                                                 </span></a>
+<a class="sourceLine" id="cb9-271" data-line-number="271"><span class="co">#&gt;  3 mm Millimeter                                                                </span></a>
+<a class="sourceLine" id="cb9-272" data-line-number="272"><span class="co">#&gt;  4 cm Centimeter                                                                </span></a>
+<a class="sourceLine" id="cb9-273" data-line-number="273"><span class="co">#&gt;  5 m Meter                                                                      </span></a>
+<a class="sourceLine" id="cb9-274" data-line-number="274"><span class="co">#&gt;  6 ft-us Foot                                                                   </span></a>
+<a class="sourceLine" id="cb9-275" data-line-number="275"><span class="co">#&gt;  7 in-us Prostate specific Ag/Prostate volume calculated from height, width and…</span></a>
+<a class="sourceLine" id="cb9-276" data-line-number="276"><span class="co">#&gt;  8 [V] [S] 8478 avidity index [UCUM {ai}] [Unit] [Unit]                         </span></a>
+<a class="sourceLine" id="cb9-277" data-line-number="277"><span class="co">#&gt;  9 [V] [S] 8479 centipoise [UCUM cP] [Unit] [Unit]                              </span></a>
+<a class="sourceLine" id="cb9-278" data-line-number="278"><span class="co">#&gt; 10 [V] [S] 8480 Ehrlich unit [UCUM [EU]] [Unit] [Unit]                          </span></a>
+<a class="sourceLine" id="cb9-279" data-line-number="279"><span class="co">#&gt; # … with 1,001 more rows</span></a>
+<a class="sourceLine" id="cb9-280" data-line-number="280"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-281" data-line-number="281"><span class="co">#&gt; $YES_NO_UNKNOWN</span></a>
+<a class="sourceLine" id="cb9-282" data-line-number="282"><span class="co">#&gt; # A tibble: 1 x 1</span></a>
+<a class="sourceLine" id="cb9-283" data-line-number="283"><span class="co">#&gt;   concept                                                              </span></a>
+<a class="sourceLine" id="cb9-284" data-line-number="284"><span class="co">#&gt;   &lt;chr&gt;                                                                </span></a>
+<a class="sourceLine" id="cb9-285" data-line-number="285"><span class="co">#&gt; 1 [V] [S] 4188539 Yes [SNOMED 373066001] [Meas Value] [Qualifier Value]</span></a></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

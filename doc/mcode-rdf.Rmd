@@ -1,0 +1,128 @@
+---
+title: "mCode Valuesets to RDF"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{mCode Valuesets to RDF}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE
+)
+```
+
+```{r setup}
+library(tidyverse)
+library(mOMOP)
+```
+
+The mappings between the mCode Value Sets and OMOP Concepts is converted into an 
+RDF to view and edit in Protege.  
+
+There are 3 vocabulary-level datasets in this package that require additional 
+parsing for appropriate categorization into owl: `SNOMED`, `ICD10CM`, and `LOINC`. 
+This categarization is done by assessing the source mCode value sets each belongs 
+to.   
+
+In mCode, `LOINC` is used only for tumor marker testing with no overlap with 
+any other dataset. 
+
+```{r}
+unique(LOINC$value_set_name)
+```
+
+All the valuesets represented by `ICD10CM` overlaps with `SNOMED`.  
+
+```{r}
+unique(ICD10CM$value_set_name)
+unique(SNOMED$value_set_name)
+```
+
+To manage the overlaps, `ICD10CM` and `SNOMED` are combined and split by value set. 
+
+```{r}
+ICD10CM_SNOMED <-
+  bind_rows(ICD10CM,
+            SNOMED) %>%
+  rubix::split_by(col = value_set_name)
+names(ICD10CM_SNOMED)
+```
+
+The names are adjusted to following the uppercase snake format for this project. 
+
+```{r}
+nms <- names(ICD10CM_SNOMED)
+nms <- str_remove_all(nms, "VS$")
+nms <- str_replace_all(nms, "([a-z]{1})([A-Z]{1})","\\1_\\2")
+nms <- toupper(nms)
+names(ICD10CM_SNOMED) <- nms
+names(ICD10CM_SNOMED)
+```
+
+The other datasets are combined into a list with `LOINC` renamed to 
+`TUMOR_MARKER_MEASUREMENT`. Each dataset in the `mcode_classes` list is now 
+divided by "Class" for the OWL class hierarchy.
+
+```{r}
+other_value_sets <-
+list(CANCER_STAGING = CANCER_STAGING, 
+          GENOMICS = GENOMICS, 
+          TUMOR_MARKER_MEASUREMENT = LOINC, 
+          SPECIMEN = SPECIMEN, 
+          UNITS_OF_MEASUREMENT = UNITS_OF_MEASUREMENT) 
+
+mcode_classes <-
+  c(ICD10CM_SNOMED,
+    other_value_sets)
+
+names(mcode_classes)
+```
+
+All the concepts in each class are converted to the `chariot` package's `strip` 
+format to represent them as single instances in OWL. For the `SPECIMEN` class 
+specifically, the original mCode `code` and `code description` are carried over 
+as instances to provide the appropriate gap coverage in the specimen representation.
+
+```{r}
+mcode_classes2 <-
+mcode_classes %>%
+  map(mutate_all, as.character) %>%
+  bind_rows(.id = "class") %>% 
+  chariot::merge_strip(into = "concept") %>%
+  # Specimen domain has additional columns
+  unite(
+    col = "mcode_concept", 
+    code, code_description, 
+    sep = " ", 
+    remove = FALSE,
+    na.rm = TRUE
+    ) %>%
+  mutate(concept = coalesce(concept, Specimen, mcode_concept)) %>%
+  distinct() %>%
+  rubix::split_by(col = "class")
+```
+
+The data is written to an Excel to load when calling the `data` function. 
+
+```{r,message=FALSE}
+file <- file.path(getwd(), "data-raw/mcode_rdf.xlsx")
+if (!file.exists(file)) {
+  openxlsx::write.xlsx(x = mcode_classes2,
+                       file = file)
+}
+```
+
+# Data Glossary 
+
+```{r}
+mcode_classes3 <-
+  mcode_classes2 %>%
+  map(select, concept)
+mcode_classes3
+```
+
+

@@ -1,3 +1,11 @@
+#' @title OWL Class Hierarchy
+#' @description
+#' All the datasets within this package are modified to reflect classes in OWL
+#' format.
+#' @details
+#' See the `mcode-rdf` vignette for more details.
+"OWL"
+
 #' @title cancer_staging
 #' @description DATASET_DESCRIPTION
 #' @format A data frame with 1617 rows and 15 variables:
