@@ -98,15 +98,8 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/meerapatelmd/mOMOP">mOMOP</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></code></pre></div>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.3.2.9000     ✓ purrr   0.3.4     
-## ✓ tibble  3.0.4          ✓ dplyr   1.0.2     
-## ✓ tidyr   1.1.2          ✓ stringr 1.4.0     
-## ✓ readr   1.4.0          ✓ forcats 0.5.0</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p>Combining all the maps into a single map between all the value sets and mappings.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">complete_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">CANCER_STAGING</span>, <span class="va">GENOMICS</span>, <span class="va">ICD10CM</span>, <span class="va">LOINC</span>, 
     <span class="va">SNOMED</span>, <span class="va">SPECIMEN</span>, <span class="va">UNITS_OF_MEASUREMENT</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">map</span><span class="op">(</span><span class="va">mutate_all</span>, 
     <span class="va">as.character</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">bind_rows</span><span class="op">(</span><span class="op">)</span>
@@ -131,9 +124,59 @@
 ## #   descendants_of &lt;chr&gt;, all_codes &lt;chr&gt;, Observation &lt;chr&gt;, Condition &lt;chr&gt;,
 ## #   `Spec Anatomic Site` &lt;chr&gt;, Drug &lt;chr&gt;, `Meas Value` &lt;chr&gt;,
 ## #   Measurement &lt;chr&gt;, Specimen &lt;chr&gt;, X14 &lt;chr&gt;</code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>Names of value sets:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">value_sets</span> <span class="op">&lt;-</span> <span class="va">complete_map</span> <span class="op">%&gt;%</span> <span class="fu">rubix</span><span class="fu">::</span><span class="fu"><a href="https://meerapatelmd.github.io/rubix/reference/split_by.html">split_by</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">value_set_name</span><span class="op">)</span>
-<span class="va">value_sets</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">value_sets</span><span class="op">)</span></code></pre></div>
+<pre><code>##  [1] "CancerBodyLocationVS"                      
+##  [2] "CancerDiseaseStatusEvidenceTypeVS"         
+##  [3] "CancerDisorderVS"                          
+##  [4] "CancerRelatedSurgicalProcedureVS"          
+##  [5] "CancerStagingSystemVS"                     
+##  [6] "ClinVarVS"                                 
+##  [7] "ComorbidConditionVS"                       
+##  [8] "ConditionStatusTrendVS"                    
+##  [9] "GeneticSpecimenTypeVS"                     
+## [10] "HGNCVS"                                    
+## [11] "HistologyMorphologyBehaviorVS"             
+## [12] "LateralityVS"                              
+## [13] "PrimaryOrUncertainBehaviorCancerDisorderVS"
+## [14] "RadiationProcedureVS"                      
+## [15] "RadiationTargetBodySiteVS"                 
+## [16] "SecondaryCancerDisorderVS"                 
+## [17] "TNMDistantMetastasesCategoryVS"            
+## [18] "TNMPrimaryTumorCategoryVS"                 
+## [19] "TNMRegionalNodesCategoryVS"                
+## [20] "TNMStageGroupVS"                           
+## [21] "TreatmentIntentVS"                         
+## [22] "TreatmentTerminationReasonVS"              
+## [23] "TumorMarkerTestVS"                         
+## [24] "UnitsOfLengthVS"                           
+## [25] "YesNoUnknownVS"</code></pre>
+<div id="omop-concept-distribution-plots" class="section level2">
+<h2 class="hasAnchor">
+<a href="#omop-concept-distribution-plots" class="anchor"></a>OMOP Concept Distribution Plots</h2>
+<p>Each mCode value set’s OMOP mapping distribution is plotted for visual comparison of the way the concepts are represented in OMOP.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">value_sets</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">value_sets</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">%&gt;%</span> <span class="fu">count</span><span class="op">(</span><span class="va">domain_id</span>, <span class="va">vocabulary_id</span>, 
+        <span class="va">concept_class_id</span><span class="op">)</span>
+    <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">df</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder</a></span><span class="op">(</span><span class="va">concept_class_id</span>, 
+        <span class="op">-</span><span class="va">n</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">n</span>, fill <span class="op">=</span> <span class="va">domain_id</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span> 
+        <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu">expansion</span><span class="op">(</span>mult <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, 
+        <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="st">"mCode Value Set %s OMOP Concept Distribution"</span>, 
+        <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">value_sets</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>, x <span class="op">=</span> <span class="st">"OMOP Concept Class"</span>, y <span class="op">=</span> <span class="st">"Count"</span><span class="op">)</span> <span class="op">+</span> 
+        <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, 
+        hjust <span class="op">=</span> <span class="fl">1.1</span>, size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<p><img src="valuesets_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-4.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-5.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-6.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-7.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-8.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-9.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-10.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-11.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-12.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-13.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-14.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-15.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-16.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-17.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-18.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-19.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-20.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-21.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-22.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-23.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-24.png" width="672" style="display: block; margin: auto;"><img src="valuesets_files/figure-html/unnamed-chunk-4-25.png" width="672" style="display: block; margin: auto;"></p>
+</div>
+<div id="valueset-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#valueset-data" class="anchor"></a>Valueset Data</h2>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">value_sets</span></code></pre></div>
 <pre><code>## $CancerBodyLocationVS
 ## # A tibble: 42,022 x 26
 ##    value_set_name code_system logical_definit… code  code_description concept_id
@@ -625,11 +668,14 @@
 ## #   all_codes &lt;chr&gt;, Observation &lt;chr&gt;, Condition &lt;chr&gt;, `Spec Anatomic
 ## #   Site` &lt;chr&gt;, Drug &lt;chr&gt;, `Meas Value` &lt;chr&gt;, Measurement &lt;chr&gt;,
 ## #   Specimen &lt;chr&gt;, X14 &lt;chr&gt;</code></pre>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
