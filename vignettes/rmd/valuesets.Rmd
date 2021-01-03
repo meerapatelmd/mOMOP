@@ -1,7 +1,10 @@
 ---
 title: "mCode Value Sets"
 author: "Meera Y. Patel, M.D."
-output: pdf_document
+output: 
+  pdf_document:
+    toc: true
+    toc_depth: 3
 ---
 
 ```{r setup, include=FALSE}
@@ -38,6 +41,7 @@ library(mOMOP)
 library(tidyverse)
 ```
 
+Combining all the maps into a single map between all the value sets and mappings.
 
 ```{r}
 complete_map <-
@@ -52,12 +56,45 @@ list(CANCER_STAGING,
   bind_rows()
 complete_map
 ```
+  
+  
+Names of value sets:  
 
 ```{r}
 value_sets <-
   complete_map %>%
   rubix::split_by(col = value_set_name)
-value_sets
+names(value_sets)
 ```
 
+```{r}
+for (i in seq_along(value_sets)) {
+df <-
+value_sets[[i]] %>%
+  count(domain_id,
+        vocabulary_id,
+        concept_class_id)
+
+p <- ggplot2::ggplot(data = df,
+                aes(x = reorder(concept_class_id, -n),
+                    y = n,
+                    fill = domain_id)) +
+  ggplot2::geom_bar(stat = "identity") +
+  ggplot2::theme_minimal() + 
+  ggplot2::scale_y_continuous(expand = expansion(mult = c(0,0.05))) +
+  ggplot2::labs(title = sprintf("mCode Value Set %s OMOP Concept Distribution", names(value_sets)[i]),
+                x = "OMOP Concept Class",
+                y = "Count") +
+  ggplot2::scale_fill_brewer(palette = "Dark2")
+
+print(p)
+}
+```
+
+
+## Valueset Data  
+
+```{r}
+value_sets
+```
 
