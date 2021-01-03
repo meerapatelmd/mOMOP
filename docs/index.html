@@ -78,7 +78,334 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-What the package does (one paragraph).
+<div id="momop" class="section level1">
+<div class="page-header"><h1 class="hasAnchor">
+<a href="#momop" class="anchor"></a>mOMOP</h1></div>
+<!-- badges: start -->
+
+<p>The goal of mOMOP is to crosswalk mCode with the OMOP Vocabularies.</p>
+<div id="installation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h2>
+<p>You can install mOMOP with:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/">devtools</a></span><span class="op">)</span>
+<span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"meerapatelmd/mOMOP"</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="mcode-to-omop" class="section level2">
+<h2 class="hasAnchor">
+<a href="#mcode-to-omop" class="anchor"></a>mCode to OMOP</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/meerapatelmd/mOMOP">mOMOP</a></span><span class="op">)</span></code></pre></div>
+<p>The crosswalk between mCode value sets and OMOP concepts can be accessed with the following pre-packaged dataframes: <code>CANCER_STAGING</code>, <code>GENOMICS</code>, <code>ICD10CM</code>, <code>LOINC</code>, <code>SNOMED</code>, <code>SPECIMEN</code>, <code>UNITS_OF_MEASUREMENT</code>.</p>
+<div id="cancer-staging" class="section level3">
+<h3 class="hasAnchor">
+<a href="#cancer-staging" class="anchor"></a>Cancer Staging</h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">CANCER_STAGING</span><span class="op">)</span>
+<span class="co">#&gt;                   value_set_name              code_system</span>
+<span class="co">#&gt; 1 TNMDistantMetastasesCategoryVS http://cancerstaging.org</span>
+<span class="co">#&gt; 2 TNMDistantMetastasesCategoryVS http://cancerstaging.org</span>
+<span class="co">#&gt; 3 TNMDistantMetastasesCategoryVS http://cancerstaging.org</span>
+<span class="co">#&gt; 4 TNMDistantMetastasesCategoryVS http://cancerstaging.org</span>
+<span class="co">#&gt; 5 TNMDistantMetastasesCategoryVS http://cancerstaging.org</span>
+<span class="co">#&gt; 6 TNMDistantMetastasesCategoryVS http://cancerstaging.org</span>
+<span class="co">#&gt;                                         logical_definition code</span>
+<span class="co">#&gt; 1 includes codes from code system http://cancerstaging.org   NA</span>
+<span class="co">#&gt; 2 includes codes from code system http://cancerstaging.org   NA</span>
+<span class="co">#&gt; 3 includes codes from code system http://cancerstaging.org   NA</span>
+<span class="co">#&gt; 4 includes codes from code system http://cancerstaging.org   NA</span>
+<span class="co">#&gt; 5 includes codes from code system http://cancerstaging.org   NA</span>
+<span class="co">#&gt; 6 includes codes from code system http://cancerstaging.org   NA</span>
+<span class="co">#&gt;   code_description concept_id</span>
+<span class="co">#&gt; 1               NA    1537692</span>
+<span class="co">#&gt; 2               NA    1537780</span>
+<span class="co">#&gt; 3               NA    1537798</span>
+<span class="co">#&gt; 4               NA    1537804</span>
+<span class="co">#&gt; 5               NA    1537805</span>
+<span class="co">#&gt; 6               NA    1537808</span>
+<span class="co">#&gt;                                                                                             concept_name</span>
+<span class="co">#&gt; 1                                                 Vulvar Cancer cM1 TNM Finding by AJCC/UICC 8th edition</span>
+<span class="co">#&gt; 2                                                Retinoblastoma cM0 TNM Finding by AJCC/UICC 8th edition</span>
+<span class="co">#&gt; 3                                              Eyelid Carcinoma pM1 TNM Finding by AJCC/UICC 8th edition</span>
+<span class="co">#&gt; 4 Uterine Corpus Leiomyosarcoma and Endometrial Stromal Sarcoma cM0 TNM Finding by AJCC/UICC 8th edition</span>
+<span class="co">#&gt; 5                 Esophagus and Esophagogastric Junction Cancer cM1 TNM Finding by AJCC/UICC 8th edition</span>
+<span class="co">#&gt; 6           Duodenum and Ampulla of Vater Neuroendocrine Tumor cM1c TNM Finding by AJCC/UICC 8th edition</span>
+<span class="co">#&gt;     domain_id vocabulary_id concept_class_id standard_concept concept_code</span>
+<span class="co">#&gt; 1 Measurement          NCIt    AJCC Category                S     cM1-50-8</span>
+<span class="co">#&gt; 2 Measurement          NCIt    AJCC Category                S     cM0-68-8</span>
+<span class="co">#&gt; 3 Measurement          NCIt    AJCC Category                S     pM1-64-8</span>
+<span class="co">#&gt; 4 Measurement          NCIt    AJCC Category                S   cM0-54.1-8</span>
+<span class="co">#&gt; 5 Measurement          NCIt    AJCC Category                S     cM1-16-8</span>
+<span class="co">#&gt; 6 Measurement          NCIt    AJCC Category                S    cM1c-30-8</span>
+<span class="co">#&gt;   valid_start_date valid_end_date invalid_reason</span>
+<span class="co">#&gt; 1       2018-01-01     2099-12-31             NA</span>
+<span class="co">#&gt; 2       2018-01-01     2099-12-31             NA</span>
+<span class="co">#&gt; 3       2018-01-01     2099-12-31             NA</span>
+<span class="co">#&gt; 4       2018-01-01     2099-12-31             NA</span>
+<span class="co">#&gt; 5       2018-01-01     2099-12-31             NA</span>
+<span class="co">#&gt; 6       2018-01-01     2099-12-31             NA</span></code></pre></div>
+</div>
+<div id="genomics" class="section level3">
+<h3 class="hasAnchor">
+<a href="#genomics" class="anchor"></a>Genomics</h3>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">GENOMICS</span><span class="op">)</span>
+<span class="co">#&gt;   value_set_name                     code_system</span>
+<span class="co">#&gt; 1         HGNCVS http://www.genenames.org/geneId</span>
+<span class="co">#&gt; 2         HGNCVS http://www.genenames.org/geneId</span>
+<span class="co">#&gt; 3         HGNCVS http://www.genenames.org/geneId</span>
+<span class="co">#&gt; 4         HGNCVS http://www.genenames.org/geneId</span>
+<span class="co">#&gt; 5         HGNCVS http://www.genenames.org/geneId</span>
+<span class="co">#&gt; 6         HGNCVS http://www.genenames.org/geneId</span>
+<span class="co">#&gt;                             logical_definition code code_description concept_id</span>
+<span class="co">#&gt; 1 All codes in http://www.genenames.org/geneId   NA               NA   35944910</span>
+<span class="co">#&gt; 2 All codes in http://www.genenames.org/geneId   NA               NA   35944911</span>
+<span class="co">#&gt; 3 All codes in http://www.genenames.org/geneId   NA               NA   35944912</span>
+<span class="co">#&gt; 4 All codes in http://www.genenames.org/geneId   NA               NA   35944913</span>
+<span class="co">#&gt; 5 All codes in http://www.genenames.org/geneId   NA               NA   35944914</span>
+<span class="co">#&gt; 6 All codes in http://www.genenames.org/geneId   NA               NA   35944916</span>
+<span class="co">#&gt;                                         concept_name   domain_id vocabulary_id</span>
+<span class="co">#&gt; 1  CCDC77 (coiled-coil domain containing 77) Variant Measurement          HGNC</span>
+<span class="co">#&gt; 2 INMT (indolethylamine N-methyltransferase) Variant Measurement          HGNC</span>
+<span class="co">#&gt; 3           ZNF117 (zinc finger protein 117) Variant Measurement          HGNC</span>
+<span class="co">#&gt; 4  CKAP2 (cytoskeleton associated protein 2) Variant Measurement          HGNC</span>
+<span class="co">#&gt; 5                   ITPRIPL2 (ITPRIP like 2) Variant Measurement          HGNC</span>
+<span class="co">#&gt; 6   PEX19 (peroxisomal biogenesis factor 19) Variant Measurement          HGNC</span>
+<span class="co">#&gt;   concept_class_id standard_concept concept_code valid_start_date</span>
+<span class="co">#&gt; 1             Gene                S        28203       2006-02-16</span>
+<span class="co">#&gt; 2             Gene                S         6069       1999-09-07</span>
+<span class="co">#&gt; 3             Gene                S        12897       1992-05-19</span>
+<span class="co">#&gt; 4             Gene                S         1990       1999-12-01</span>
+<span class="co">#&gt; 5             Gene                S        27257       2008-08-11</span>
+<span class="co">#&gt; 6             Gene                S         9713       1997-06-12</span>
+<span class="co">#&gt;   valid_end_date invalid_reason</span>
+<span class="co">#&gt; 1     2099-12-31             NA</span>
+<span class="co">#&gt; 2     2099-12-31             NA</span>
+<span class="co">#&gt; 3     2099-12-31             NA</span>
+<span class="co">#&gt; 4     2099-12-31             NA</span>
+<span class="co">#&gt; 5     2099-12-31             NA</span>
+<span class="co">#&gt; 6     2099-12-31             NA</span></code></pre></div>
+</div>
+<div id="icd-10-cm" class="section level3">
+<h3 class="hasAnchor">
+<a href="#icd-10-cm" class="anchor"></a>ICD-10-CM</h3>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ICD10CM</span><span class="op">)</span>
+<span class="co">#&gt;     value_set_name code_system logical_definition  code</span>
+<span class="co">#&gt; 1 CancerDisorderVS   ICD-10-CM                 NA C00.0</span>
+<span class="co">#&gt; 2 CancerDisorderVS   ICD-10-CM                 NA C00.1</span>
+<span class="co">#&gt; 3 CancerDisorderVS   ICD-10-CM                 NA C00.2</span>
+<span class="co">#&gt; 4 CancerDisorderVS   ICD-10-CM                 NA C00.3</span>
+<span class="co">#&gt; 5 CancerDisorderVS   ICD-10-CM                 NA C00.4</span>
+<span class="co">#&gt; 6 CancerDisorderVS   ICD-10-CM                 NA C00.5</span>
+<span class="co">#&gt;                                       code_description concept_id</span>
+<span class="co">#&gt; 1             Malignant neoplasm of external upper lip   35206047</span>
+<span class="co">#&gt; 2             Malignant neoplasm of external lower lip   35206048</span>
+<span class="co">#&gt; 3      Malignant neoplasm of external lip, unspecified   35206049</span>
+<span class="co">#&gt; 4        Malignant neoplasm of upper lip, inner aspect   35206050</span>
+<span class="co">#&gt; 5        Malignant neoplasm of lower lip, inner aspect   35206051</span>
+<span class="co">#&gt; 6 Malignant neoplasm of lip, unspecified, inner aspect   35206052</span>
+<span class="co">#&gt;                                           concept_name domain_id vocabulary_id</span>
+<span class="co">#&gt; 1             Malignant neoplasm of external upper lip Condition       ICD10CM</span>
+<span class="co">#&gt; 2             Malignant neoplasm of external lower lip Condition       ICD10CM</span>
+<span class="co">#&gt; 3      Malignant neoplasm of external lip, unspecified Condition       ICD10CM</span>
+<span class="co">#&gt; 4        Malignant neoplasm of upper lip, inner aspect Condition       ICD10CM</span>
+<span class="co">#&gt; 5        Malignant neoplasm of lower lip, inner aspect Condition       ICD10CM</span>
+<span class="co">#&gt; 6 Malignant neoplasm of lip, unspecified, inner aspect Condition       ICD10CM</span>
+<span class="co">#&gt;      concept_class_id standard_concept concept_code valid_start_date</span>
+<span class="co">#&gt; 1 4-char billing code               NA        C00.0       2007-01-01</span>
+<span class="co">#&gt; 2 4-char billing code               NA        C00.1       2007-01-01</span>
+<span class="co">#&gt; 3 4-char billing code               NA        C00.2       2007-01-01</span>
+<span class="co">#&gt; 4 4-char billing code               NA        C00.3       2007-01-01</span>
+<span class="co">#&gt; 5 4-char billing code               NA        C00.4       2007-01-01</span>
+<span class="co">#&gt; 6 4-char billing code               NA        C00.5       2007-01-01</span>
+<span class="co">#&gt;   valid_end_date invalid_reason</span>
+<span class="co">#&gt; 1     2099-12-31             NA</span>
+<span class="co">#&gt; 2     2099-12-31             NA</span>
+<span class="co">#&gt; 3     2099-12-31             NA</span>
+<span class="co">#&gt; 4     2099-12-31             NA</span>
+<span class="co">#&gt; 5     2099-12-31             NA</span>
+<span class="co">#&gt; 6     2099-12-31             NA</span></code></pre></div>
+</div>
+<div id="loinc" class="section level3">
+<h3 class="hasAnchor">
+<a href="#loinc" class="anchor"></a>LOINC</h3>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">LOINC</span><span class="op">)</span>
+<span class="co">#&gt;      value_set_name code_system logical_definition    code</span>
+<span class="co">#&gt; 1 TumorMarkerTestVS       LOINC                 NA  1695-6</span>
+<span class="co">#&gt; 2 TumorMarkerTestVS       LOINC                 NA 31203-3</span>
+<span class="co">#&gt; 3 TumorMarkerTestVS       LOINC                 NA  1692-3</span>
+<span class="co">#&gt; 4 TumorMarkerTestVS       LOINC                 NA  1693-1</span>
+<span class="co">#&gt; 5 TumorMarkerTestVS       LOINC                 NA  1694-9</span>
+<span class="co">#&gt; 6 TumorMarkerTestVS       LOINC                 NA 72820-4</span>
+<span class="co">#&gt;                                                       code_description</span>
+<span class="co">#&gt; 1                  5-Hydroxyindoleacetate [Mass/time] in 24 hour Urine</span>
+<span class="co">#&gt; 2                5-Hydroxyindoleacetate [Mass/volume] in 24 hour Urine</span>
+<span class="co">#&gt; 3        5-Hydroxyindoleacetate [Mass/volume] in Cerebral spinal fluid</span>
+<span class="co">#&gt; 4              5-Hydroxyindoleacetate [Mass/volume] in Serum or Plasma</span>
+<span class="co">#&gt; 5                        5-Hydroxyindoleacetate [Mass/volume] in Urine</span>
+<span class="co">#&gt; 6 5-Hydroxyindoleacetate [Mass/volume] in Urine by Confirmatory method</span>
+<span class="co">#&gt;   concept_id</span>
+<span class="co">#&gt; 1    3005148</span>
+<span class="co">#&gt; 2    3023028</span>
+<span class="co">#&gt; 3    3014670</span>
+<span class="co">#&gt; 4    3021106</span>
+<span class="co">#&gt; 5    3021385</span>
+<span class="co">#&gt; 6   43055680</span>
+<span class="co">#&gt;                                                           concept_name</span>
+<span class="co">#&gt; 1                  5-Hydroxyindoleacetate [Mass/time] in 24 hour Urine</span>
+<span class="co">#&gt; 2                5-Hydroxyindoleacetate [Mass/volume] in 24 hour Urine</span>
+<span class="co">#&gt; 3        5-Hydroxyindoleacetate [Mass/volume] in Cerebral spinal fluid</span>
+<span class="co">#&gt; 4              5-Hydroxyindoleacetate [Mass/volume] in Serum or Plasma</span>
+<span class="co">#&gt; 5                        5-Hydroxyindoleacetate [Mass/volume] in Urine</span>
+<span class="co">#&gt; 6 5-Hydroxyindoleacetate [Mass/volume] in Urine by Confirmatory method</span>
+<span class="co">#&gt;     domain_id vocabulary_id concept_class_id standard_concept concept_code</span>
+<span class="co">#&gt; 1 Measurement         LOINC         Lab Test                S       1695-6</span>
+<span class="co">#&gt; 2 Measurement         LOINC         Lab Test                S      31203-3</span>
+<span class="co">#&gt; 3 Measurement         LOINC         Lab Test                S       1692-3</span>
+<span class="co">#&gt; 4 Measurement         LOINC         Lab Test                S       1693-1</span>
+<span class="co">#&gt; 5 Measurement         LOINC         Lab Test                S       1694-9</span>
+<span class="co">#&gt; 6 Measurement         LOINC         Lab Test                S      72820-4</span>
+<span class="co">#&gt;   valid_start_date valid_end_date invalid_reason</span>
+<span class="co">#&gt; 1       1970-01-01     2099-12-31             NA</span>
+<span class="co">#&gt; 2       1970-01-01     2099-12-31             NA</span>
+<span class="co">#&gt; 3       1970-01-01     2099-12-31             NA</span>
+<span class="co">#&gt; 4       1970-01-01     2099-12-31             NA</span>
+<span class="co">#&gt; 5       1970-01-01     2099-12-31             NA</span>
+<span class="co">#&gt; 6       2012-12-10     2099-12-31             NA</span></code></pre></div>
+</div>
+<div id="snomed" class="section level3">
+<h3 class="hasAnchor">
+<a href="#snomed" class="anchor"></a>SNOMED</h3>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">SNOMED</span><span class="op">)</span>
+<span class="co">#&gt;         value_set_name code_system</span>
+<span class="co">#&gt; 1 CancerBodyLocationVS   SNOMED CT</span>
+<span class="co">#&gt; 2 CancerBodyLocationVS   SNOMED CT</span>
+<span class="co">#&gt; 3 CancerBodyLocationVS   SNOMED CT</span>
+<span class="co">#&gt; 4 CancerBodyLocationVS   SNOMED CT</span>
+<span class="co">#&gt; 5 CancerBodyLocationVS   SNOMED CT</span>
+<span class="co">#&gt; 6 CancerBodyLocationVS   SNOMED CT</span>
+<span class="co">#&gt;                                          logical_definition ancestors_of</span>
+<span class="co">#&gt; 1 includes codes descending from 123037004 | Body Structure           NA</span>
+<span class="co">#&gt; 2 includes codes descending from 123037004 | Body Structure           NA</span>
+<span class="co">#&gt; 3 includes codes descending from 123037004 | Body Structure           NA</span>
+<span class="co">#&gt; 4 includes codes descending from 123037004 | Body Structure           NA</span>
+<span class="co">#&gt; 5 includes codes descending from 123037004 | Body Structure           NA</span>
+<span class="co">#&gt; 6 includes codes descending from 123037004 | Body Structure           NA</span>
+<span class="co">#&gt;   descendants_of code code_description all_codes concept_id</span>
+<span class="co">#&gt; 1      123037004   NA               NA 123037004    4048384</span>
+<span class="co">#&gt; 2      123037004   NA               NA 123037004    4002852</span>
+<span class="co">#&gt; 3      123037004   NA               NA 123037004   36717763</span>
+<span class="co">#&gt; 4      123037004   NA               NA 123037004    4230944</span>
+<span class="co">#&gt; 5      123037004   NA               NA 123037004   42605189</span>
+<span class="co">#&gt; 6      123037004   NA               NA 123037004    4097829</span>
+<span class="co">#&gt;                                             concept_name          domain_id</span>
+<span class="co">#&gt; 1                                         Body structure Spec Anatomic Site</span>
+<span class="co">#&gt; 2                                       Buccal embrasure Spec Anatomic Site</span>
+<span class="co">#&gt; 3                    Skin structure of left lower eyelid Spec Anatomic Site</span>
+<span class="co">#&gt; 4                                          Adenofibrosis        Observation</span>
+<span class="co">#&gt; 5 Intervertebral foramen of eighteenth thoracic vertebra Spec Anatomic Site</span>
+<span class="co">#&gt; 6                            Transitional cell carcinoma        Observation</span>
+<span class="co">#&gt;       vocabulary_id  concept_class_id standard_concept    concept_code</span>
+<span class="co">#&gt; 1            SNOMED    Body Structure                S       123037004</span>
+<span class="co">#&gt; 2            SNOMED    Body Structure                S       110326006</span>
+<span class="co">#&gt; 3            SNOMED    Body Structure                S       719884003</span>
+<span class="co">#&gt; 4            SNOMED Morph Abnormality                S        89115006</span>
+<span class="co">#&gt; 5 SNOMED Veterinary    Body Structure                S 336621000009107</span>
+<span class="co">#&gt; 6            SNOMED Morph Abnormality                S        27090000</span>
+<span class="co">#&gt;   valid_start_date valid_end_date invalid_reason</span>
+<span class="co">#&gt; 1       1970-01-01     2099-12-31             NA</span>
+<span class="co">#&gt; 2       1970-01-01     2099-12-31             NA</span>
+<span class="co">#&gt; 3       2017-01-31     2099-12-31             NA</span>
+<span class="co">#&gt; 4       1970-01-01     2099-12-31             NA</span>
+<span class="co">#&gt; 5       2014-01-31     2099-12-31             NA</span>
+<span class="co">#&gt; 6       1970-01-01     2099-12-31             NA</span></code></pre></div>
+</div>
+<div id="specimen" class="section level3">
+<h3 class="hasAnchor">
+<a href="#specimen" class="anchor"></a>Specimen</h3>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">SPECIMEN</span><span class="op">)</span>
+<span class="co">#&gt;   concept_id        value_set_name</span>
+<span class="co">#&gt; 1    1027716 GeneticSpecimenTypeVS</span>
+<span class="co">#&gt; 2    1032268 GeneticSpecimenTypeVS</span>
+<span class="co">#&gt; 3    1033195 GeneticSpecimenTypeVS</span>
+<span class="co">#&gt; 4    1033465 GeneticSpecimenTypeVS</span>
+<span class="co">#&gt; 5    1033739 GeneticSpecimenTypeVS</span>
+<span class="co">#&gt; 6    1585831 GeneticSpecimenTypeVS</span>
+<span class="co">#&gt;                                     code_system logical_definition code</span>
+<span class="co">#&gt; 1 http://terminology.hl7.org/CodeSystem/v2-0487                 NA  SKN</span>
+<span class="co">#&gt; 2 http://terminology.hl7.org/CodeSystem/v2-0487                 NA  PLC</span>
+<span class="co">#&gt; 3 http://terminology.hl7.org/CodeSystem/v2-0487                 NA  SAL</span>
+<span class="co">#&gt; 4 http://terminology.hl7.org/CodeSystem/v2-0487                 NA  SPT</span>
+<span class="co">#&gt; 5 http://terminology.hl7.org/CodeSystem/v2-0487                 NA  WND</span>
+<span class="co">#&gt; 6 http://terminology.hl7.org/CodeSystem/v2-0487                 NA  BON</span>
+<span class="co">#&gt;   code_description</span>
+<span class="co">#&gt; 1             Skin</span>
+<span class="co">#&gt; 2         Placenta</span>
+<span class="co">#&gt; 3           Saliva</span>
+<span class="co">#&gt; 4           Sputum</span>
+<span class="co">#&gt; 5            Wound</span>
+<span class="co">#&gt; 6             Bone</span>
+<span class="co">#&gt;                                                                                                       Observation</span>
+<span class="co">#&gt; 1                                             [V] [N] 1027716 Skin [LOINC LP36760-4] [Observation] [LOINC System]</span>
+<span class="co">#&gt; 2                                          [V] [N] 1032268 Placenta [LOINC LP7477-5] [Observation] [LOINC System]</span>
+<span class="co">#&gt; 3                                            [V] [N] 1033195 Saliva [LOINC LP7565-7] [Observation] [LOINC System]</span>
+<span class="co">#&gt; 4                                            [V] [N] 1033465 Sputum [LOINC LP7600-2] [Observation] [LOINC System]</span>
+<span class="co">#&gt; 5                                             [V] [N] 1033739 Wound [LOINC LP7726-5] [Observation] [LOINC System]</span>
+<span class="co">#&gt; 6 [V] [N] 1585831 Organ Transplant Description: Bone [PPI OrganTransplantDescription_Bone] [Observation] [Answer]</span>
+<span class="co">#&gt;   Condition Spec Anatomic Site Drug Meas Value Measurement Specimen X14</span>
+<span class="co">#&gt; 1      &lt;NA&gt;               &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;     &lt;NA&gt;  NA</span>
+<span class="co">#&gt; 2      &lt;NA&gt;               &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;     &lt;NA&gt;  NA</span>
+<span class="co">#&gt; 3      &lt;NA&gt;               &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;     &lt;NA&gt;  NA</span>
+<span class="co">#&gt; 4      &lt;NA&gt;               &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;     &lt;NA&gt;  NA</span>
+<span class="co">#&gt; 5      &lt;NA&gt;               &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;     &lt;NA&gt;  NA</span>
+<span class="co">#&gt; 6      &lt;NA&gt;               &lt;NA&gt; &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;     &lt;NA&gt;  NA</span></code></pre></div>
+</div>
+<div id="units-of-measurement" class="section level3">
+<h3 class="hasAnchor">
+<a href="#units-of-measurement" class="anchor"></a>Units of Measurement</h3>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">UNITS_OF_MEASUREMENT</span><span class="op">)</span>
+<span class="co">#&gt;    value_set_name               code_system logical_definition  code</span>
+<span class="co">#&gt; 1 UnitsOfLengthVS http://unitsofmeasure.org                 NA    pm</span>
+<span class="co">#&gt; 2 UnitsOfLengthVS http://unitsofmeasure.org                 NA    nm</span>
+<span class="co">#&gt; 3 UnitsOfLengthVS http://unitsofmeasure.org                 NA    mm</span>
+<span class="co">#&gt; 4 UnitsOfLengthVS http://unitsofmeasure.org                 NA    cm</span>
+<span class="co">#&gt; 5 UnitsOfLengthVS http://unitsofmeasure.org                 NA     m</span>
+<span class="co">#&gt; 6 UnitsOfLengthVS http://unitsofmeasure.org                 NA ft-us</span>
+<span class="co">#&gt;   code_description concept_id concept_name domain_id vocabulary_id</span>
+<span class="co">#&gt; 1        Picometer         NA         &lt;NA&gt;      &lt;NA&gt;          &lt;NA&gt;</span>
+<span class="co">#&gt; 2        Nanometer         NA         &lt;NA&gt;      &lt;NA&gt;          &lt;NA&gt;</span>
+<span class="co">#&gt; 3       Millimeter         NA         &lt;NA&gt;      &lt;NA&gt;          &lt;NA&gt;</span>
+<span class="co">#&gt; 4       Centimeter         NA         &lt;NA&gt;      &lt;NA&gt;          &lt;NA&gt;</span>
+<span class="co">#&gt; 5            Meter         NA         &lt;NA&gt;      &lt;NA&gt;          &lt;NA&gt;</span>
+<span class="co">#&gt; 6             Foot         NA         &lt;NA&gt;      &lt;NA&gt;          &lt;NA&gt;</span>
+<span class="co">#&gt;   concept_class_id standard_concept concept_code valid_start_date</span>
+<span class="co">#&gt; 1             &lt;NA&gt;             &lt;NA&gt;         &lt;NA&gt;             &lt;NA&gt;</span>
+<span class="co">#&gt; 2             &lt;NA&gt;             &lt;NA&gt;         &lt;NA&gt;             &lt;NA&gt;</span>
+<span class="co">#&gt; 3             &lt;NA&gt;             &lt;NA&gt;         &lt;NA&gt;             &lt;NA&gt;</span>
+<span class="co">#&gt; 4             &lt;NA&gt;             &lt;NA&gt;         &lt;NA&gt;             &lt;NA&gt;</span>
+<span class="co">#&gt; 5             &lt;NA&gt;             &lt;NA&gt;         &lt;NA&gt;             &lt;NA&gt;</span>
+<span class="co">#&gt; 6             &lt;NA&gt;             &lt;NA&gt;         &lt;NA&gt;             &lt;NA&gt;</span>
+<span class="co">#&gt;   valid_end_date invalid_reason</span>
+<span class="co">#&gt; 1           &lt;NA&gt;           &lt;NA&gt;</span>
+<span class="co">#&gt; 2           &lt;NA&gt;           &lt;NA&gt;</span>
+<span class="co">#&gt; 3           &lt;NA&gt;           &lt;NA&gt;</span>
+<span class="co">#&gt; 4           &lt;NA&gt;           &lt;NA&gt;</span>
+<span class="co">#&gt; 5           &lt;NA&gt;           &lt;NA&gt;</span>
+<span class="co">#&gt; 6           &lt;NA&gt;           &lt;NA&gt;</span></code></pre></div>
+</div>
+</div>
+<div id="code-of-conduct" class="section level2">
+<h2 class="hasAnchor">
+<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h2>
+<p>Please note that the mOMOP project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -112,7 +439,14 @@ What the package does (one paragraph).
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://CRAN.R-project.org/package=mOMOP"><img src="https://www.r-pkg.org/badges/version/mOMOP" alt="CRAN status"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 
