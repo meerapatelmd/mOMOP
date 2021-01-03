@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/mOMOP)](https://CRAN.R-project.org/package=mOMOP)
 <!-- badges: end -->
 
-The goal of mOMOP is to crosswalk mCode with the OMOP Vocabularies and CDM. 
+The goal of mOMOP is to crosswalk mCode with the OMOP Vocabularies. 
 
 ## Installation
 
@@ -31,11 +31,57 @@ library(devtools)
 install_github("meerapatelmd/mOMOP")
 ```
 
-## Example
+## mCode to OMOP
 
-This is a basic example which shows you how to solve a common problem:
+```{r}
+library(mOMOP)
+```
+
+
+The crosswalk between mCode value sets and OMOP concepts can be accessed with the following pre-packaged dataframes: `CANCER_STAGING`, `GENOMICS`, `ICD10CM`, `LOINC`, `SNOMED`, `SPECIMEN`, `UNITS_OF_MEASUREMENT`.
+
+### Cancer Staging
 
 ```{r example}
-library(mOMOP)
-## basic example code
+head(CANCER_STAGING)
 ```
+
+### Genomics 
+
+```{r}
+head(GENOMICS)
+```
+
+### ICD-10-CM
+
+```{r}
+head(ICD10CM)
+```
+
+### LOINC 
+
+```{r}
+head(LOINC)
+```
+
+### SNOMED 
+
+```{r}
+head(SNOMED)
+```
+
+### Specimen 
+
+```{r}
+head(SPECIMEN)
+```
+
+### Units of Measurement 
+
+```{r}
+head(UNITS_OF_MEASUREMENT)
+```
+
+## Code of Conduct
+
+Please note that the mOMOP project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
