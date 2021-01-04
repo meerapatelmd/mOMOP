@@ -89,7 +89,7 @@
 <a href="#momop" class="anchor"></a>mOMOP</h1></div>
 <!-- badges: start -->
 
-<p>The goal of mOMOP is an ontology that crosswalk the <a href="https://mcodeinitiative.org/">Minimal Common Oncology Data Elements (mCode)</a> with the OMOP Vocabularies. mCode and the mCode Initiative provides a common data language and model for data exchange between entities while the OMOP Vocabularies integrate data elements into the OMOP Common Data Model to serve analytics use cases.</p>
+<p>The goal of mOMOP is to crosswalk the <a href="https://mcodeinitiative.org/">Minimal Common Oncology Data Elements (mCode)</a> with the OMOP Vocabularies. mCode and the mCode Initiative provides a common data language and model for data exchange between entities while the OMOP Vocabularies integrate data elements into the OMOP Common Data Model to serve analytics use cases. A crosswalk using the terminology service will bridge the gap between data interoperability and analytical application.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -98,16 +98,31 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/">devtools</a></span><span class="op">)</span>
 <span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"meerapatelmd/mOMOP"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="mcode-to-omop" class="section level2">
+<div id="examples" class="section level2">
 <h2 class="hasAnchor">
-<a href="#mcode-to-omop" class="anchor"></a>mCode to OMOP</h2>
+<a href="#examples" class="anchor"></a>Examples</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/meerapatelmd/mOMOP">mOMOP</a></span><span class="op">)</span></code></pre></div>
-<p>The crosswalk between mCode value sets and OMOP concepts can be accessed with the following pre-packaged dataframes: <code>CANCER_STAGING</code>, <code>GENOMICS</code>, <code>ICD10CM</code>, <code>LOINC</code>, <code>SNOMED</code>, <code>SPECIMEN</code>, <code>UNITS_OF_MEASUREMENT</code>.</p>
+</div>
+<div id="mcode-class-hierarchy" class="section level2">
+<h2 class="hasAnchor">
+<a href="#mcode-class-hierarchy" class="anchor"></a>mCode Class Hierarchy</h2>
+<p>The end-product of this package is the <code>MCODE_CLASS_HIERARCHY</code> dataset, which is a flattened taxonomy that serves a variety of use cases. For example, it can be used to incorporate mCode into a lookup table in a relational database such as the retrieval of a certain class of data elements or it can be incorporated into an ontology.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">rMarkedDown</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rMarkedDown/man/print_dt.html">print_dt</a></span><span class="op">(</span><span class="va">MCODE_CLASS_HIERARCHY</span><span class="op">)</span>
+<span class="co">#&gt; Warning in instance$preRenderHook(instance): It seems your data is too big</span>
+<span class="co">#&gt; for client-side DataTables. You may consider server-side processing: https://</span>
+<span class="co">#&gt; rstudio.github.io/DT/server.html</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-3-1.png" width="100%"></p>
+</div>
+<div id="crosswalks-from-mcode-to-omop" class="section level2">
+<h2 class="hasAnchor">
+<a href="#crosswalks-from-mcode-to-omop" class="anchor"></a>Crosswalks from mCode to OMOP</h2>
+<p>The crosswalk between mCode value sets and OMOP concepts used to create the <code>MCODE_CLASS_HIERARCHY</code> dataset can be accessed with the following pre-packaged dataframes: <code>CANCER_STAGING</code>, <code>GENOMICS</code>, <code>ICD10CM</code>, <code>LOINC</code>, <code>SNOMED</code>, <code>SPECIMEN</code>, <code>UNITS_OF_MEASUREMENT</code>.</p>
 <div id="cancer-staging" class="section level3">
 <h3 class="hasAnchor">
 <a href="#cancer-staging" class="anchor"></a>Cancer Staging</h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">CANCER_STAGING</span><span class="op">)</span>
 <span class="co">#&gt;                   value_set_name              code_system</span>
 <span class="co">#&gt; 1 TNMDistantMetastasesCategoryVS http://cancerstaging.org</span>
@@ -155,7 +170,7 @@
 <div id="genomics" class="section level3">
 <h3 class="hasAnchor">
 <a href="#genomics" class="anchor"></a>Genomics</h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">GENOMICS</span><span class="op">)</span>
 <span class="co">#&gt;   value_set_name                     code_system</span>
 <span class="co">#&gt; 1         HGNCVS http://www.genenames.org/geneId</span>
@@ -196,7 +211,7 @@
 <div id="icd-10-cm" class="section level3">
 <h3 class="hasAnchor">
 <a href="#icd-10-cm" class="anchor"></a>ICD-10-CM</h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ICD10CM</span><span class="op">)</span>
 <span class="co">#&gt;     value_set_name code_system logical_definition  code</span>
 <span class="co">#&gt; 1 CancerDisorderVS   ICD-10-CM                 NA C00.0</span>
@@ -237,7 +252,7 @@
 <div id="loinc" class="section level3">
 <h3 class="hasAnchor">
 <a href="#loinc" class="anchor"></a>LOINC</h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">LOINC</span><span class="op">)</span>
 <span class="co">#&gt;      value_set_name code_system logical_definition    code</span>
 <span class="co">#&gt; 1 TumorMarkerTestVS       LOINC                 NA  1695-6</span>
@@ -285,7 +300,7 @@
 <div id="snomed" class="section level3">
 <h3 class="hasAnchor">
 <a href="#snomed" class="anchor"></a>SNOMED</h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">SNOMED</span><span class="op">)</span>
 <span class="co">#&gt;         value_set_name code_system</span>
 <span class="co">#&gt; 1 CancerBodyLocationVS   SNOMED CT</span>
@@ -333,7 +348,7 @@
 <div id="specimen" class="section level3">
 <h3 class="hasAnchor">
 <a href="#specimen" class="anchor"></a>Specimen</h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">SPECIMEN</span><span class="op">)</span>
 <span class="co">#&gt;   concept_id        value_set_name</span>
 <span class="co">#&gt; 1    1027716 GeneticSpecimenTypeVS</span>
@@ -374,7 +389,7 @@
 <div id="units-of-measurement" class="section level3">
 <h3 class="hasAnchor">
 <a href="#units-of-measurement" class="anchor"></a>Units of Measurement</h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">UNITS_OF_MEASUREMENT</span><span class="op">)</span>
 <span class="co">#&gt;    value_set_name               code_system logical_definition  code</span>
 <span class="co">#&gt; 1 UnitsOfLengthVS http://unitsofmeasure.org                 NA    pm</span>
