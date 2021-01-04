@@ -8,7 +8,9 @@ SPECIMEN <- readr::read_csv("/Users/meerapatel/GitHub/packages/mOMOP/data-raw/sp
 UNITS_OF_MEASUREMENT <- readr::read_csv("/Users/meerapatel/GitHub/packages/mOMOP/data-raw/unitsofmeasurement.csv")
 
 library(broca)
-OWL <- broca::read_full_excel(file = "/Users/meerapatel/GitHub/packages/mOMOP/data-raw/mcode_rdf.xlsx")
+library(dplyr)
+MCODE_CLASS_HIERARCHY <- broca::read_full_excel(file = "/Users/meerapatel/GitHub/packages/mOMOP/data-raw/mcode_rdf.xlsx") %>%
+        bind_rows(.id = "CLASS")
 usethis::use_data(
 	CANCER_STAGING,
 	GENOMICS,
@@ -17,6 +19,6 @@ usethis::use_data(
 	SNOMED,
 	SPECIMEN,
 	UNITS_OF_MEASUREMENT,
-	OWL,
-overwrite = TRUE
+	MCODE_CLASS_HIERARCHY,
+        overwrite = TRUE
 )

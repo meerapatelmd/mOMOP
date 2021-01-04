@@ -1,10 +1,10 @@
-#' @title OWL Class Hierarchy
+#' @title mCode-OMOP Class Hierarchy
 #' @description
 #' All the datasets within this package are modified to reflect classes in OWL
 #' format.
 #' @details
 #' See the `mcode-rdf` vignette for more details.
-"OWL"
+"MCODE_CLASS_HIERARCHY"
 
 #' @title cancer_staging
 #' @description DATASET_DESCRIPTION

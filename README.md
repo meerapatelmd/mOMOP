@@ -11,7 +11,10 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://www.r-pkg.org/badges/version/mOMOP)](https://CRAN.R-project.org/package=mOMOP)
 <!-- badges: end -->
 
-The goal of mOMOP is to crosswalk mCode with the OMOP Vocabularies.
+The goal of mOMOP is an ontology that crosswalk the [Minimal Common Oncology Data Elements (mCode)](https://mcodeinitiative.org/) with the OMOP Vocabularies. mCode and the 
+mCode Initiative provides a common data language and model for data exchange 
+between entities while the OMOP Vocabularies integrate data elements into the 
+OMOP Common Data Model to serve analytics use cases.  
 
 ## Installation
 
