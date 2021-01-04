@@ -11,10 +11,14 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://www.r-pkg.org/badges/version/mOMOP)](https://CRAN.R-project.org/package=mOMOP)
 <!-- badges: end -->
 
-The goal of mOMOP is an ontology that crosswalk the [Minimal Common Oncology Data Elements (mCode)](https://mcodeinitiative.org/) with the OMOP Vocabularies. mCode and the 
-mCode Initiative provides a common data language and model for data exchange 
-between entities while the OMOP Vocabularies integrate data elements into the 
-OMOP Common Data Model to serve analytics use cases.  
+The goal of mOMOP is to crosswalk the [Minimal Common Oncology Data
+Elements (mCode)](https://mcodeinitiative.org/) with the OMOP
+Vocabularies. mCode and the mCode Initiative provides a common data
+language and model for data exchange between entities while the OMOP
+Vocabularies integrate data elements into the OMOP Common Data Model to
+serve analytics use cases. A crosswalk using the terminology service
+will bridge the gap between data interoperability and analytical
+application.
 
 ## Installation
 
@@ -25,16 +29,35 @@ library(devtools)
 install_github("meerapatelmd/mOMOP")
 ```
 
-## mCode to OMOP
+## Examples
 
 ``` r
 library(mOMOP)
 ```
 
-The crosswalk between mCode value sets and OMOP concepts can be accessed
-with the following pre-packaged dataframes: `CANCER_STAGING`,
-`GENOMICS`, `ICD10CM`, `LOINC`, `SNOMED`, `SPECIMEN`,
-`UNITS_OF_MEASUREMENT`.
+## mCode Class Hierarchy
+
+The end-product of this package is the `MCODE_CLASS_HIERARCHY` dataset,
+which is a flattened taxonomy that serves a variety of use cases. For
+example, it can be used to incorporate mCode into a lookup table in a
+relational database such as the retrieval of a certain class of data
+elements or it can be incorporated into an ontology.
+
+``` r
+rMarkedDown::print_dt(MCODE_CLASS_HIERARCHY)
+#> Warning in instance$preRenderHook(instance): It seems your data is too big
+#> for client-side DataTables. You may consider server-side processing: https://
+#> rstudio.github.io/DT/server.html
+```
+
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+
+## Crosswalks from mCode to OMOP
+
+The crosswalk between mCode value sets and OMOP concepts used to create
+the `MCODE_CLASS_HIERARCHY` dataset can be accessed with the following
+pre-packaged dataframes: `CANCER_STAGING`, `GENOMICS`, `ICD10CM`,
+`LOINC`, `SNOMED`, `SPECIMEN`, `UNITS_OF_MEASUREMENT`.
 
 ### Cancer Staging
 

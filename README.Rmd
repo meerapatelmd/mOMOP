@@ -20,10 +20,12 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/mOMOP)](https://CRAN.R-project.org/package=mOMOP)
 <!-- badges: end -->
 
-The goal of mOMOP is an ontology that crosswalk the [Minimal Common Oncology Data Elements (mCode)](https://mcodeinitiative.org/) with the OMOP Vocabularies. mCode and the 
+The goal of mOMOP is to crosswalk the [Minimal Common Oncology Data Elements (mCode)](https://mcodeinitiative.org/) with the OMOP Vocabularies. mCode and the 
 mCode Initiative provides a common data language and model for data exchange 
 between entities while the OMOP Vocabularies integrate data elements into the 
-OMOP Common Data Model to serve analytics use cases.  
+OMOP Common Data Model to serve analytics use cases. A crosswalk using the 
+terminology service will bridge the gap between data interoperability and 
+analytical application.
 
 ## Installation
 
@@ -34,16 +36,31 @@ library(devtools)
 install_github("meerapatelmd/mOMOP")
 ```
 
-## mCode to OMOP
+## Examples  
 
 ```{r}
 library(mOMOP)
 ```
 
+## mCode Class Hierarchy  
 
-The crosswalk between mCode value sets and OMOP concepts can be accessed with 
-the following pre-packaged dataframes: `CANCER_STAGING`, `GENOMICS`, `ICD10CM`, 
-`LOINC`, `SNOMED`, `SPECIMEN`, `UNITS_OF_MEASUREMENT`.
+The end-product of this package is the `MCODE_CLASS_HIERARCHY` dataset, which is 
+a flattened taxonomy that serves a variety of use cases. For example, it can be 
+used to incorporate mCode into a lookup table in a relational database such as 
+the retrieval of a certain class of data elements or it can be incorporated into 
+an ontology. 
+
+```{r}
+rMarkedDown::print_dt(MCODE_CLASS_HIERARCHY)
+```
+
+
+## Crosswalks from mCode to OMOP
+
+The crosswalk between mCode value sets and OMOP concepts used to create the 
+`MCODE_CLASS_HIERARCHY` dataset can be accessed with the following pre-packaged 
+dataframes: `CANCER_STAGING`, `GENOMICS`, `ICD10CM`, `LOINC`, `SNOMED`, 
+`SPECIMEN`, `UNITS_OF_MEASUREMENT`.
 
 ### Cancer Staging
 
