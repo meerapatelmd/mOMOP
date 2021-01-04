@@ -3,32 +3,32 @@
 \docType{data}
 \name{LOINC}
 \alias{LOINC}
-\title{loinc}
+\title{LOINC}
 \format{
 A data frame with 160 rows and 15 variables:
 \describe{
-\item{\code{value_set_name}}{character COLUMN_DESCRIPTION}
-\item{\code{code_system}}{character COLUMN_DESCRIPTION}
-\item{\code{logical_definition}}{logical COLUMN_DESCRIPTION}
-\item{\code{code}}{character COLUMN_DESCRIPTION}
-\item{\code{code_description}}{character COLUMN_DESCRIPTION}
-\item{\code{concept_id}}{double COLUMN_DESCRIPTION}
-\item{\code{concept_name}}{character COLUMN_DESCRIPTION}
-\item{\code{domain_id}}{character COLUMN_DESCRIPTION}
-\item{\code{vocabulary_id}}{character COLUMN_DESCRIPTION}
-\item{\code{concept_class_id}}{character COLUMN_DESCRIPTION}
-\item{\code{standard_concept}}{character COLUMN_DESCRIPTION}
-\item{\code{concept_code}}{character COLUMN_DESCRIPTION}
-\item{\code{valid_start_date}}{double COLUMN_DESCRIPTION}
-\item{\code{valid_end_date}}{double COLUMN_DESCRIPTION}
-\item{\code{invalid_reason}}{logical COLUMN_DESCRIPTION}
+\item{\code{value_set_name}}{character}
+\item{\code{code_system}}{character}
+\item{\code{logical_definition}}{logical}
+\item{\code{code}}{character}
+\item{\code{code_description}}{character}
+\item{\code{concept_id}}{double}
+\item{\code{concept_name}}{character}
+\item{\code{domain_id}}{character}
+\item{\code{vocabulary_id}}{character}
+\item{\code{concept_class_id}}{character}
+\item{\code{standard_concept}}{character}
+\item{\code{concept_code}}{character}
+\item{\code{valid_start_date}}{double}
+\item{\code{valid_end_date}}{double}
+\item{\code{invalid_reason}}{logical}
 }
 }
 \usage{
 LOINC
 }
 \description{
-DATASET_DESCRIPTION
+All LOINC Concepts in the Minimal Common Oncology Data Elements.
 }
 \details{
 DETAILS

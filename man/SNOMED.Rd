@@ -3,37 +3,34 @@
 \docType{data}
 \name{SNOMED}
 \alias{SNOMED}
-\title{snomed}
+\title{SNOMED}
 \format{
 A data frame with 175450 rows and 18 variables:
 \describe{
-\item{\code{value_set_name}}{character COLUMN_DESCRIPTION}
-\item{\code{code_system}}{character COLUMN_DESCRIPTION}
-\item{\code{logical_definition}}{character COLUMN_DESCRIPTION}
-\item{\code{ancestors_of}}{logical COLUMN_DESCRIPTION}
-\item{\code{descendants_of}}{double COLUMN_DESCRIPTION}
-\item{\code{code}}{logical COLUMN_DESCRIPTION}
-\item{\code{code_description}}{logical COLUMN_DESCRIPTION}
-\item{\code{all_codes}}{double COLUMN_DESCRIPTION}
-\item{\code{concept_id}}{double COLUMN_DESCRIPTION}
-\item{\code{concept_name}}{character COLUMN_DESCRIPTION}
-\item{\code{domain_id}}{character COLUMN_DESCRIPTION}
-\item{\code{vocabulary_id}}{character COLUMN_DESCRIPTION}
-\item{\code{concept_class_id}}{character COLUMN_DESCRIPTION}
-\item{\code{standard_concept}}{character COLUMN_DESCRIPTION}
-\item{\code{concept_code}}{character COLUMN_DESCRIPTION}
-\item{\code{valid_start_date}}{double COLUMN_DESCRIPTION}
-\item{\code{valid_end_date}}{double COLUMN_DESCRIPTION}
-\item{\code{invalid_reason}}{logical COLUMN_DESCRIPTION}
+\item{\code{value_set_name}}{character}
+\item{\code{code_system}}{character}
+\item{\code{logical_definition}}{character}
+\item{\code{ancestors_of}}{logical}
+\item{\code{descendants_of}}{double}
+\item{\code{code}}{logical}
+\item{\code{code_description}}{logical}
+\item{\code{all_codes}}{double}
+\item{\code{concept_id}}{double}
+\item{\code{concept_name}}{character}
+\item{\code{domain_id}}{character}
+\item{\code{vocabulary_id}}{character}
+\item{\code{concept_class_id}}{character}
+\item{\code{standard_concept}}{character}
+\item{\code{concept_code}}{character}
+\item{\code{valid_start_date}}{double}
+\item{\code{valid_end_date}}{double}
+\item{\code{invalid_reason}}{logical}
 }
 }
 \usage{
 SNOMED
 }
 \description{
-DATASET_DESCRIPTION
-}
-\details{
-DETAILS
+All SNOMED Concepts in the Minimal Common Oncology Data Elements.
 }
 \keyword{datasets}

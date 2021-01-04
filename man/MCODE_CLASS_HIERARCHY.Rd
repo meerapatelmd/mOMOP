@@ -11,7 +11,8 @@ An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) w
 MCODE_CLASS_HIERARCHY
 }
 \description{
-All the datasets within this package are modified to reflect classes in OWL
+This dataset is the result of the modifications of all the other datasets
+in this package into classes for integration into an ontology.
 format.
 }
 \details{

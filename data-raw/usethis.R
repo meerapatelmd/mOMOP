@@ -10,7 +10,7 @@ UNITS_OF_MEASUREMENT <- readr::read_csv("/Users/meerapatel/GitHub/packages/mOMOP
 library(broca)
 library(dplyr)
 MCODE_CLASS_HIERARCHY <- broca::read_full_excel(file = "/Users/meerapatel/GitHub/packages/mOMOP/data-raw/mcode_rdf.xlsx") %>%
-        bind_rows(.id = "CLASS")
+        bind_rows(.id = "class")
 usethis::use_data(
 	CANCER_STAGING,
 	GENOMICS,

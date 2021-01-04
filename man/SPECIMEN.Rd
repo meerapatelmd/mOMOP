@@ -3,33 +3,31 @@
 \docType{data}
 \name{SPECIMEN}
 \alias{SPECIMEN}
-\title{specimen}
+\title{Specimen}
 \format{
 A data frame with 3928 rows and 14 variables:
 \describe{
-\item{\code{concept_id}}{double COLUMN_DESCRIPTION}
-\item{\code{value_set_name}}{character COLUMN_DESCRIPTION}
-\item{\code{code_system}}{character COLUMN_DESCRIPTION}
-\item{\code{logical_definition}}{logical COLUMN_DESCRIPTION}
-\item{\code{code}}{character COLUMN_DESCRIPTION}
-\item{\code{code_description}}{character COLUMN_DESCRIPTION}
-\item{\code{Observation}}{character COLUMN_DESCRIPTION}
-\item{\code{Condition}}{character COLUMN_DESCRIPTION}
-\item{\code{Spec Anatomic Site}}{character COLUMN_DESCRIPTION}
-\item{\code{Drug}}{character COLUMN_DESCRIPTION}
-\item{\code{Meas Value}}{character COLUMN_DESCRIPTION}
-\item{\code{Measurement}}{character COLUMN_DESCRIPTION}
-\item{\code{Specimen}}{character COLUMN_DESCRIPTION}
-\item{\code{X14}}{logical COLUMN_DESCRIPTION}
+\item{\code{concept_id}}{double}
+\item{\code{value_set_name}}{character}
+\item{\code{code_system}}{character}
+\item{\code{logical_definition}}{logical}
+\item{\code{code}}{character}
+\item{\code{code_description}}{character}
+\item{\code{Observation}}{character}
+\item{\code{Condition}}{character}
+\item{\code{Spec Anatomic Site}}{character}
+\item{\code{Drug}}{character}
+\item{\code{Meas Value}}{character}
+\item{\code{Measurement}}{character}
+\item{\code{Specimen}}{character}
+\item{\code{X14}}{logical}
 }
 }
 \usage{
 SPECIMEN
 }
 \description{
-DATASET_DESCRIPTION
-}
-\details{
-DETAILS
+All the possible clinical specimen types across both mCode and
+OMOP.
 }
 \keyword{datasets}
