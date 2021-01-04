@@ -41,7 +41,9 @@ library(mOMOP)
 ```
 
 
-The crosswalk between mCode value sets and OMOP concepts can be accessed with the following pre-packaged dataframes: `CANCER_STAGING`, `GENOMICS`, `ICD10CM`, `LOINC`, `SNOMED`, `SPECIMEN`, `UNITS_OF_MEASUREMENT`.
+The crosswalk between mCode value sets and OMOP concepts can be accessed with 
+the following pre-packaged dataframes: `CANCER_STAGING`, `GENOMICS`, `ICD10CM`, 
+`LOINC`, `SNOMED`, `SPECIMEN`, `UNITS_OF_MEASUREMENT`.
 
 ### Cancer Staging
 
