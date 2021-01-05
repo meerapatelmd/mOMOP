@@ -109,11 +109,21 @@
 <a href="#mcode-class-hierarchy" class="anchor"></a>mCode Class Hierarchy</h2>
 <p>The end-product of this package is the <code>MCODE_CLASS_HIERARCHY</code> dataset, which is a flattened taxonomy that serves a variety of use cases. For example, it can be used to incorporate mCode into a lookup table in a relational database such as the retrieval of a certain class of data elements or it can be incorporated into an ontology.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">rMarkedDown</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rMarkedDown/man/print_dt.html">print_dt</a></span><span class="op">(</span><span class="va">MCODE_CLASS_HIERARCHY</span><span class="op">)</span>
-<span class="co">#&gt; Warning in instance$preRenderHook(instance): It seems your data is too big</span>
-<span class="co">#&gt; for client-side DataTables. You may consider server-side processing: https://</span>
-<span class="co">#&gt; rstudio.github.io/DT/server.html</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-3-1.png" width="100%"></p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">MCODE_CLASS_HIERARCHY</span><span class="op">)</span>
+<span class="co">#&gt;                  class</span>
+<span class="co">#&gt; 1 CANCER_BODY_LOCATION</span>
+<span class="co">#&gt; 2 CANCER_BODY_LOCATION</span>
+<span class="co">#&gt; 3 CANCER_BODY_LOCATION</span>
+<span class="co">#&gt; 4 CANCER_BODY_LOCATION</span>
+<span class="co">#&gt; 5 CANCER_BODY_LOCATION</span>
+<span class="co">#&gt; 6 CANCER_BODY_LOCATION</span>
+<span class="co">#&gt;                                                                                                                                             concept</span>
+<span class="co">#&gt; 1                                                           [V] [S] 4048384 Body structure [SNOMED 123037004] [Spec Anatomic Site] [Body Structure]</span>
+<span class="co">#&gt; 2                                                         [V] [S] 4002852 Buccal embrasure [SNOMED 110326006] [Spec Anatomic Site] [Body Structure]</span>
+<span class="co">#&gt; 3                                     [V] [S] 36717763 Skin structure of left lower eyelid [SNOMED 719884003] [Spec Anatomic Site] [Body Structure]</span>
+<span class="co">#&gt; 4                                                                 [V] [S] 4230944 Adenofibrosis [SNOMED 89115006] [Observation] [Morph Abnormality]</span>
+<span class="co">#&gt; 5 [V] [S] 42605189 Intervertebral foramen of eighteenth thoracic vertebra [SNOMED Veterinary 336621000009107] [Spec Anatomic Site] [Body Structure]</span>
+<span class="co">#&gt; 6                                                   [V] [S] 4097829 Transitional cell carcinoma [SNOMED 27090000] [Observation] [Morph Abnormality]</span></code></pre></div>
 </div>
 <div id="crosswalks-from-mcode-to-omop" class="section level2">
 <h2 class="hasAnchor">

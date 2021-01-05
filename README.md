@@ -44,13 +44,22 @@ relational database such as the retrieval of a certain class of data
 elements or it can be incorporated into an ontology.
 
 ``` r
-rMarkedDown::print_dt(MCODE_CLASS_HIERARCHY)
-#> Warning in instance$preRenderHook(instance): It seems your data is too big
-#> for client-side DataTables. You may consider server-side processing: https://
-#> rstudio.github.io/DT/server.html
+head(MCODE_CLASS_HIERARCHY)
+#>                  class
+#> 1 CANCER_BODY_LOCATION
+#> 2 CANCER_BODY_LOCATION
+#> 3 CANCER_BODY_LOCATION
+#> 4 CANCER_BODY_LOCATION
+#> 5 CANCER_BODY_LOCATION
+#> 6 CANCER_BODY_LOCATION
+#>                                                                                                                                             concept
+#> 1                                                           [V] [S] 4048384 Body structure [SNOMED 123037004] [Spec Anatomic Site] [Body Structure]
+#> 2                                                         [V] [S] 4002852 Buccal embrasure [SNOMED 110326006] [Spec Anatomic Site] [Body Structure]
+#> 3                                     [V] [S] 36717763 Skin structure of left lower eyelid [SNOMED 719884003] [Spec Anatomic Site] [Body Structure]
+#> 4                                                                 [V] [S] 4230944 Adenofibrosis [SNOMED 89115006] [Observation] [Morph Abnormality]
+#> 5 [V] [S] 42605189 Intervertebral foramen of eighteenth thoracic vertebra [SNOMED Veterinary 336621000009107] [Spec Anatomic Site] [Body Structure]
+#> 6                                                   [V] [S] 4097829 Transitional cell carcinoma [SNOMED 27090000] [Observation] [Morph Abnormality]
 ```
-
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
 ## Crosswalks from mCode to OMOP
 

@@ -51,7 +51,7 @@ the retrieval of a certain class of data elements or it can be incorporated into
 an ontology. 
 
 ```{r}
-rMarkedDown::print_dt(MCODE_CLASS_HIERARCHY)
+head(MCODE_CLASS_HIERARCHY)
 ```
 
 
